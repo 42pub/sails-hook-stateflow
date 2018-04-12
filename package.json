@@ -14,7 +14,7 @@
     ]
   ],
   "_from": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-  "_id": "sails-hook-core@0.0.1",
+  "_id": "sails-hook-orders@0.0.1",
   "_inCache": true,
   "_location": "/sails-hook-adminpanel-floormaps",
   "_phantomChildren": {},
@@ -37,13 +37,13 @@
   "_spec": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
   "_where": "/srv/tdc/back",
   "dependencies": {
-    "sails-build-dictionary": "^0.10.1"
+    "lodash": "^4.17.5"
   },
   "description": "Core for any shop",
   "devDependencies": {},
   "gitHead": "2a0fbe27b9107da42c64df3dac7a96416112ff07",
   "main": "index.js",
-  "name": "sails-hook-core",
+  "name": "sails-hook-orders",
   "optionalDependencies": {},
   "readme": "ERROR: No README data found!",
   "sails": {

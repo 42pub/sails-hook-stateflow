@@ -2,28 +2,18 @@ const State = require('../../State');
 
 let states = [
   new State({
-    name: 'CART',
-    valid: require('../../lib/valides/cart'),
-    next: ['CHECKOUT']
+    name: 'CREATED',
+    valid: require('../../lib/valid'),
+    next: ['IN_PROGRESS']
   }),
   new State({
-    name: 'CHECKOUT',
-    valid: require('../../lib/valides/checkout'),
-    next: ['PAYMENT']
-  }),
+    name: 'IN_PROGRESS',
+    valid: require('../../lib/valid'),
+    next: ['FINISHED']
+  })
   new State({
-    name: 'PAYMENT',
-    valid: require('../../lib/valides/payment'),
-    next: ['PAID']
-  }),
-  new State({
-    name: 'PAID',
-    valid: require('../../lib/valides/paid'),
-    next: ['CANCELED']
-  }),
-  new State({
-    name: 'CANCELED',
-    valid: require('../../lib/valides/canceled'),
+    name: 'FINISHED',
+    valid: require('../../lib/valid'),
     next: []
   })
 ];
@@ -43,9 +33,6 @@ module.exports = {
     },
     states: {
       type: 'array'
-    },
-    items: {
-      type: 'json'
     },
     next: function (name) {
       if (!name) {

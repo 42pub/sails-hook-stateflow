@@ -11,7 +11,7 @@ class State {
     }
   }
 
-  addNext(nextName) {
+  addRoute(nextName) {
     if (!nextName || typeof nextName !== 'string')
       return false;
     if (nextName === 'CANCELED')
@@ -23,7 +23,7 @@ class State {
     return true;
   }
 
-  removeNext(nextName) {
+  removeRoute(nextName) {
     if (!nextName || typeof nextName !== 'string')
       return false;
     if (this.next.indexOf(nextName) < 0)
