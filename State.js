@@ -26,10 +26,11 @@ class State {
   removeRoute(nextName) {
     if (!nextName || typeof nextName !== 'string')
       return false;
-    if (this.next.indexOf(nextName) < 0)
+    const ind = this.next.indexOf(nextName);
+    if (ind < 0)
       return false;
 
-    this.next.slice(nextName, 1);
+    this.next.splice(ind, 1);
     return true;
   }
 }

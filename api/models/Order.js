@@ -20,7 +20,7 @@ let states = [
 
 let stateStart = states[0];
 const stateName = sails.config.stateflow.stateField;
-const statesName = state + '_list';
+const statesName = stateName + '_list';
 
 module.exports = {
   attributes: {
@@ -78,7 +78,7 @@ module.exports = {
       if (!exist)
         return false;
 
-      this[statesName].slice(state, 1);
+      this[statesName].splice(this[statesName].indexOf(state), 1);
       return state;
     },
     getState: function () {
