@@ -2,9 +2,7 @@
 
 module.exports = function (sails) {
   return {
-    initialize: cb => {
-      require('./lib/initializeModel')(sails, cb);
-      return cb();
-    }
+    defaults: require('./lib/defaults'),
+    initialize: require('./lib/initializeModel')(sails)
   };
 };

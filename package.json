@@ -14,9 +14,9 @@
     ]
   ],
   "_from": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-  "_id": "sails-hook-orders@0.0.1",
+  "_id": "sails-hook-stateflow@0.0.1",
   "_inCache": true,
-  "_location": "/sails-hook-adminpanel-floormaps",
+  "_location": "/sails-hook-stateflow",
   "_phantomChildren": {},
   "_requested": {
     "raw": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
@@ -43,12 +43,12 @@
   "devDependencies": {},
   "gitHead": "2a0fbe27b9107da42c64df3dac7a96416112ff07",
   "main": "index.js",
-  "name": "sails-hook-orders",
+  "name": "sails-hook-stateflow",
   "optionalDependencies": {},
   "readme": "ERROR: No README data found!",
   "sails": {
     "isHook": true,
-    "hookName": "hookCore"
+    "hookName": "hookStateFlow"
   },
   "scripts": {},
   "version": "0.0.1"

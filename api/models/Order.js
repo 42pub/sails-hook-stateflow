@@ -10,7 +10,7 @@ let states = [
     name: 'IN_PROGRESS',
     valid: require('../../lib/valid'),
     next: ['FINISHED']
-  })
+  }),
   new State({
     name: 'FINISHED',
     valid: require('../../lib/valid'),
@@ -19,29 +19,19 @@ let states = [
 ];
 
 let stateStart = states[0];
+const stateName = sails.config.stateflow.stateField;
+const statesName = state + '_list';
 
 module.exports = {
   attributes: {
-    id: {
-      type: 'string',
-      required: true,
-      unique: true,
-      autoIncrement: true
-    },
-    state: {
-      type: 'string'
-    },
-    states: {
-      type: 'array'
-    },
     next: function (name) {
       if (!name) {
-        if (this.state.next[0])
-          name = this.state.next[0];
+        if (this[stateName].next[0])
+          name = this[stateName].next[0];
         else
           return false;
       }
-      const stateFind = this.states.filter(s => s.name === name);
+      const stateFind = this[statesName].filter(s => s.name === name);
       if (!stateFind)
         return false;
       if (stateFind.length > 1)
@@ -50,7 +40,7 @@ module.exports = {
       if (!state.valid())
         return false;
 
-      this.state = state;
+      this[stateName] = state;
       return true;
     },
     addState: function (state) {
@@ -71,7 +61,7 @@ module.exports = {
           return false;
       }
 
-      this.states.push(state);
+      this[statesName].push(state);
       return true;
     },
     removeState: function(stateName) {
@@ -88,27 +78,27 @@ module.exports = {
       if (!exist)
         return false;
 
-      this.states.slice(state, 1);
+      this[statesName].slice(state, 1);
       return state;
     },
     getState: function () {
-      return this.state.name;
+      return this[stateName].name;
     },
     getStates: function () {
-      return this.states;
+      return this[statesName];
     }
   },
   beforeCreate: (values, cb) => {
-    values.state = states[0].name;
+    values[stateName] = states[0].name;
     return cb();
   },
   afterCreate: (values, cb) => {
-    values.states = states.concat(values.states);
-    values.state = stateStart;
+    values[statesName] = states.concat(values[statesName]);
+    values[stateName] = stateStart;
     return cb();
   },
   beforeUpdate: (values, cb) => {
-    values.state = values.state.name;
+    values[stateName] = values[stateName].name;
     return cb();
   }
 };
