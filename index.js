@@ -6,3 +6,5 @@ module.exports = function (sails) {
     initialize: require('./lib/initializeModel')(sails)
   };
 };
+
+module.exports.State = require('./State');
