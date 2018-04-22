@@ -7,8 +7,8 @@ module.exports = {
         return states;
     },
     add: function (id, state) {
+        let f = true;
         for(let i in state) {
-            let f = true;
             if (state.hasOwnProperty(i))
                 if (!state[i] instanceof State)
                      f = false;
@@ -23,5 +23,13 @@ module.exports = {
             if (states[i].id === id)
                 return states[i];
         return null;
+    },
+    update: function(id, state) {
+        let s = get(id);
+        if (s === null)
+            return null;
+        const old = states.splice(states.indexOf(s), 1);
+        states.push({id: id, states: state});
+        return old;
     }
 };

@@ -1,4 +1,5 @@
 const State = require('../../State');
+const StateContainer = require('../../StatesContainer');
 
 let states = [
     new State({
@@ -67,6 +68,7 @@ module.exports = {
             }
 
             this[statesName].push(state);
+            StateContainer.update(this.id, this[statesName]);
             return true;
         },
         removeState: function(stateName) {
@@ -84,6 +86,7 @@ module.exports = {
                 return false;
 
             this[statesName].splice(this[statesName].indexOf(state), 1);
+            StateContainer.update(this.id, this[statesName]);
             return state;
         },
         getState: function () {
@@ -91,6 +94,10 @@ module.exports = {
         },
         getStates: function () {
             return this[statesName];
+        },
+        loadState: function () {
+            this[statesName] = StateContainer.get(values.id);
+            this[stateName] = this[statesName].filter(s => s.name === this[stateName])[0];
         }
     },
     beforeCreate: (values, cb) => {
@@ -100,10 +107,11 @@ module.exports = {
     afterCreate: (values, cb) => {
         values[statesName] = states;
         values[stateName] = stateStart;
+        StateContainer.add(values.id, stateStart);
         return cb();
     },
     afterUpdate: (values, cb) => {
-        values[statesName] = states;
+        values[statesName] = StateContainer.get(values.id);
         return cb();
     }
 };
