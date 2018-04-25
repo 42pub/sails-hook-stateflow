@@ -71,12 +71,12 @@ module.exports = {
             StateContainer.update(this.id, this[statesName]);
             return true;
         },
-        removeState: function(stateName) {
+        removeState: function (stateName) {
             if (!stateName)
                 return false;
             let exist = false;
             let state;
-            for(let s in states)
+            for (let s in states)
                 if (s.name === stateName) {
                     exist = true;
                     state = s;
@@ -96,7 +96,7 @@ module.exports = {
             return this[statesName];
         },
         loadState: function () {
-            this[statesName] = StateContainer.get(values.id);
+            this[statesName] = StateContainer.get(this.id);
             this[stateName] = this[statesName].filter(s => s.name === this[stateName])[0];
         }
     },

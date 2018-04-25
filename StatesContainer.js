@@ -21,11 +21,11 @@ module.exports = {
     get: function (id) {
         for (let i in states)
             if (states[i].id === id)
-                return states[i];
+                return states[i].states;
         return null;
     },
     update: function(id, state) {
-        let s = get(id);
+        let s = this.get(id);
         if (s === null)
             return null;
         const old = states.splice(states.indexOf(s), 1);
