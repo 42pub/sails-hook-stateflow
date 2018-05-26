@@ -7,4 +7,4 @@ module.exports = function (sails) {
     };
 };
 
-module.exports.State = require('./State');
+module.exports.State = require('./models/State');
