@@ -30,12 +30,12 @@ module.exports = {
       const that = this;
       return new Promise((resolve, reject) => {
         if (!name) {
-          if (this[stateName].next[0])
-            name = this[stateName].next[0];
+          if (that[stateName].next[0])
+            name = that[stateName].next[0];
           else
             reject();
         }
-        const stateFind = this[statesName].filter(s => s !== undefined && s.name === name);
+        const stateFind = that[statesName].filter(s => s !== undefined && s.name === name);
         if (!stateFind)
           reject();
         if (stateFind.length > 1)
@@ -48,7 +48,7 @@ module.exports = {
 
             if (!result) reject();
 
-            this[stateName] = state;
+            that[stateName] = state;
             sails.emit('stateNext', that);
             resolve();
           });
@@ -109,6 +109,7 @@ module.exports = {
     },
     loadState: function () {
       this[statesName] = StateContainer.get(this.id);
+      sails.log.info(this);
       this[stateName] = this[statesName].filter(s => s.name === this[stateName])[0];
     }
   },
