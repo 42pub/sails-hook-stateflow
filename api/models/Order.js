@@ -41,17 +41,22 @@ module.exports = {
         if (stateFind.length > 1)
           reject();
         const state = stateFind[0];
-        if (state.valid !== undefined && state.valid.length > 0) {
-          async.parallel(state.valid, function (err, result) {
+        if (state.valid !== undefined) {
+          async.parallel([].concat(state.valid), function (err, result) {
             if (err) reject(err);
             sails.log.info('END');
 
-            if (!result) reject();
+            for (let i in result) {
+              i = result[i];
+              if (!i) reject();
+            }
 
             that[stateName] = state;
             sails.emit('stateNext', that);
             resolve();
           });
+        } else {
+          reject();
         }
       });
     },
@@ -85,12 +90,14 @@ module.exports = {
         return false;
       let exist = false;
       let state;
-      for (let s in states)
+      for (let s in states) {
+        s = states[s];
         if (s.name === stateName) {
           exist = true;
           state = s;
           break;
         }
+      }
       if (!exist)
         return false;
 
@@ -108,7 +115,7 @@ module.exports = {
       return this[statesName];
     },
     loadState: function () {
-      this[statesName] = StateContainer.get(this.id);
+      this[statesName] = [].concat(StateContainer.get(this.id));
       sails.log.info(this);
       this[stateName] = this[statesName].filter(s => s.name === this[stateName])[0];
     }
@@ -120,7 +127,7 @@ module.exports = {
   afterCreate: (values, cb) => {
     values[statesName] = states;
     values[stateName] = stateStart;
-    StateContainer.add(values.id, stateStart);
+    StateContainer.add(values.id, states);
     return cb();
   },
   afterUpdate: (values, cb) => {
