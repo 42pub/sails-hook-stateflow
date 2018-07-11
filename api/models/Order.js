@@ -1,27 +1,7 @@
 const State = require('../../models/State');
-const StateContainer = require('../../models/StatesContainer');
 
-let states = [
-  new State({
-    name: 'CREATED',
-    valid: [require('../../lib/valid')],
-    next: ['IN_PROGRESS']
-  }),
-  new State({
-    name: 'IN_PROGRESS',
-    valid: [require('../../lib/valid')],
-    next: ['FINISHED']
-  }),
-  new State({
-    name: 'FINISHED',
-    valid: [require('../../lib/valid')],
-    next: []
-  })
-];
-
-let stateStart = states[0];
+let stateStart = sails.stateflow[0];
 const stateName = sails.config.stateflow.stateField;
-const statesName = stateName + '_list';
 
 // noinspection JSUnusedGlobalSymbols
 module.exports = {
@@ -30,108 +10,103 @@ module.exports = {
       const that = this;
       return new Promise((resolve, reject) => {
         if (!name) {
-          if (that[stateName].next[0])
-            name = that[stateName].next[0];
-          else
-            reject();
+          const state = sails.stateflow.filter(s => s.name === that[stateName]);
+          if (!state[0])
+            reject('current state invalid');
+          else {
+            if (state[0].next[0])
+              name = state[0].next[0];
+            else
+              reject('current state has no next state');
+          }
         }
-        const stateFind = that[statesName].filter(s => s !== undefined && s.name === name);
+        const stateFind = sails.stateflow.filter(s => s !== undefined && s.name === name);
         if (!stateFind)
-          reject();
+          reject('next state is invalid');
         if (stateFind.length > 1)
-          reject();
+          reject('there is more than 1 next state with same name');
         const state = stateFind[0];
         if (state.valid !== undefined) {
           async.parallel([].concat(state.valid), function (err, result) {
             if (err) reject(err);
-            sails.log.info('END');
 
             for (let i in result) {
               i = result[i];
-              if (!i) reject();
+              if (!i) reject('validation fail');
             }
 
-            that[stateName] = state;
-            sails.emit('stateNext', that);
-            resolve();
+            that[stateName] = state.name;
+
+            that.save((err) => {
+              if (err) reject(err);
+              resolve();
+            });
           });
         } else {
-          reject();
+          reject('valid field is required');
         }
       });
     },
-    addState: function (state) {
-      if (!state || !state instanceof State)
-        return false;
-      if (states.indexOf(state) >= 0)
-        return false;
-      if (!state.name || !state.next)
-        return false;
-      for (let i in state.next) {
-        i = state.next[i];
-        let f = false;
-        for (let s in states) {
-          s = states[s];
-          if (s !== undefined && s.name === i) {
-            f = true;
-            break;
-          }
-        }
-        if (!f)
-          return false;
-      }
-
-      this[statesName].push(state);
-      StateContainer.update(this.id, this[statesName]);
-      return true;
+    getState: function () {
+      return this[stateName];
     },
-    removeState: function (stateName) {
-      if (!stateName)
-        return false;
-      let exist = false;
-      let state;
-      for (let s in states) {
-        s = states[s];
-        if (s.name === stateName) {
-          exist = true;
-          state = s;
+    getStateObj: function () {
+      return sails.stateflow.filter(s => s.name === that[stateName])[0];
+    },
+  },
+
+  addState: function (state) {
+    if (!state || !state instanceof State)
+      return false;
+    if (sails.stateflow.indexOf(state) >= 0)
+      return false;
+    if (!state.name || !state.next)
+      return false;
+    for (let i in state.next) {
+      i = state.next[i];
+      let f = false;
+      for (let s in sails.stateflow) {
+        s = sails.stateflow[s];
+        if (s !== undefined && s.name === i) {
+          f = true;
           break;
         }
       }
-      if (!exist)
+      if (!f)
         return false;
-
-      this[statesName].splice(this[statesName].indexOf(state), 1);
-      StateContainer.update(this.id, this[statesName]);
-      return state;
-    },
-    getState: function () {
-      return this[stateName].name;
-    },
-    getStateObj: function () {
-      return this[stateName];
-    },
-    getStates: function () {
-      return this[statesName];
-    },
-    loadState: function () {
-      this[statesName] = [].concat(StateContainer.get(this.id));
-      sails.log.info(this);
-      this[stateName] = this[statesName].filter(s => s.name === this[stateName])[0];
     }
+
+    sails.stateflow.push(state);
+    return true;
+  },
+  removeState: function (stateName) {
+    if (!stateName)
+      return false;
+    let exist = false;
+    let state;
+    for (let s in sails.stateflow) {
+      s = sails.stateflow[s];
+      if (s.name === stateName) {
+        exist = true;
+        state = s;
+        break;
+      }
+    }
+    if (!exist)
+      return false;
+
+    sails.stateflow.splice(sails.stateflow.indexOf(state), 1);
+    return state;
+  },
+  getStates: function () {
+    return sails.stateflow;
   },
   beforeCreate: (values, cb) => {
-    values[stateName] = states[0].name;
+    values[stateName] = sails.stateflow[0].name;
     return cb();
   },
   afterCreate: (values, cb) => {
-    values[statesName] = states;
-    values[stateName] = stateStart;
-    StateContainer.add(values.id, states);
-    return cb();
-  },
-  afterUpdate: (values, cb) => {
-    values[statesName] = StateContainer.get(values.id);
+    values[stateName] = stateStart.name;
     return cb();
   }
 };
