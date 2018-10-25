@@ -36,6 +36,7 @@ module.exports = {
             }
 
             that[stateName] = state.name;
+            sails.emit('stateNext', that);
 
             that.save((err) => {
               if (err) reject(err);
