@@ -1,14 +1,21 @@
-import { Model } from "waterline";
-let orderInstance: Model;
+//import { Model } from "waterline";
+let attributes: Model;
 
 describe("Model", function () {
   this.timeout(10000);
 
   describe("model order", async function () {
-    it("Exist next() method", async function () {
-      orderInstance = await Order.create({}).fetch();
-      //console.log(orderInstance);
-      //sails.models["order"].next();
+    it("Exist state field", async function () {
+      attributes = Order.attributes;
+      if (!attributes.state) {
+        throw "";
+      }
+    });
+
+    it("Exist method next()", async function () {
+      if (!Order.next && !(typeof Order.next === "function")) {
+        throw "";
+      }
     });
   });
 });
