@@ -95,15 +95,4 @@ module.exports = {
         sails.stateflow.splice(sails.stateflow.indexOf(state), 1);
         return state;
     },
-    // getStates: function () {
-    //   return sails.stateflow;
-    // },
-    // beforeCreate: (values, cb) => {
-    //   values[stateName] = sails.stateflow[0].name;
-    //   return cb();
-    // },
-    // // afterCreate: (values, cb) => {
-    // //   values[stateName] = stateStart.name;
-    // //   return cb();
-    // // }
 };
