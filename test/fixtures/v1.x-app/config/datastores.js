@@ -18,14 +18,8 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
-const sqlite3 = require('sqlite3');
 module.exports.datastores = {
 
-    default: {
-        adapter: 'sails-sqlite3',
-        filename: './.tmp/sqlite.db',
-        mode: sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-        verbose: false
-      }
+
 
 };

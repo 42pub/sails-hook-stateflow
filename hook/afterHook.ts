@@ -10,7 +10,7 @@ export default async function (sails: any) {
         required: false
     }
 
-    _.merge(sails.models[conf.model.toLowerCase()], model);
+   // _.merge(sails.models[conf.model.toLowerCase()], model);
   } catch (e) {
     sails.log.error("StateFlow > afterHook > LoadError", e);
     process.exit(1);

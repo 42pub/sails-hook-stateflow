@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _ = require("lodash");
 async function default_1(sails) {
     try {
         const conf = sails.config.stateflow;
@@ -10,7 +9,7 @@ async function default_1(sails) {
             type: "string",
             required: false
         };
-        _.merge(sails.models[conf.model.toLowerCase()], model);
+        // _.merge(sails.models[conf.model.toLowerCase()], model);
     }
     catch (e) {
         sails.log.error("StateFlow > afterHook > LoadError", e);
