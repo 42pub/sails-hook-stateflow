@@ -29,7 +29,7 @@
   },
   "scripts": {
     "test": "tsc ; mocha -r ts-node/register test/bootstrap.ts '{,**/}*.test.ts'",
-    "test:js": "mocha test/_bootstrap.js test/**/*.test.js",
+    "test:js": "tsc ; mocha test/_bootstrap.js test/**/*.test.js",
     "test:init": "cd ./test/fixtures/v1.x-app && npm i --no-package-lock --prefix ./ && cd -"
   },
   "version": "0.2.0",

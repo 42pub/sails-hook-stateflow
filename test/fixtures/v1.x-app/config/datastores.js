@@ -25,7 +25,7 @@ module.exports.datastores = {
         database: 'db.sqlite',
         options: {
             dialect: 'sqlite',
-            storage: 'db/sequelize.sqlite',
+            storage: 'db/stateflow.sqlite',
             logging: false
         }
     }
