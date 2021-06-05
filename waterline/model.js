@@ -1,58 +1,56 @@
-const State = require('../models/State');
+const State = require("../models/State");
 let stateStart = "INIT";
 const stateName = "state";
 // noinspection JSUnusedGlobalSymbols
 module.exports = {
-    attributes: {
-        next: function (name) {
-            const that = this;
-            return new Promise((resolve, reject) => {
-                if (!name) {
-                    const state = sails.stateflow.filter(s => s.name === that[stateName]);
-                    if (!state[0])
-                        reject('current state invalid');
-                    else {
-                        if (state[0].next[0])
-                            name = state[0].next[0];
-                        else
-                            reject('current state has no next state');
-                    }
+    next: function (name) {
+        const that = this;
+        return new Promise((resolve, reject) => {
+            if (!name) {
+                const state = sails.stateflow.filter((s) => s.name === that[stateName]);
+                if (!state[0])
+                    reject("current state invalid");
+                else {
+                    if (state[0].next[0])
+                        name = state[0].next[0];
+                    else
+                        reject("current state has no next state");
                 }
-                const stateFind = sails.stateflow.filter(s => s !== undefined && s.name === name);
-                if (!stateFind)
-                    reject('next state is invalid');
-                if (stateFind.length > 1)
-                    reject('there is more than 1 next state with same name');
-                const state = stateFind[0];
-                if (state.valid !== undefined) {
-                    async.parallel([].concat(state.valid), function (err, result) {
+            }
+            const stateFind = sails.stateflow.filter((s) => s !== undefined && s.name === name);
+            if (!stateFind)
+                reject("next state is invalid");
+            if (stateFind.length > 1)
+                reject("there is more than 1 next state with same name");
+            const state = stateFind[0];
+            if (state.valid !== undefined) {
+                async.parallel([].concat(state.valid), function (err, result) {
+                    if (err)
+                        reject(err);
+                    for (let i in result) {
+                        i = result[i];
+                        if (!i)
+                            reject("validation fail");
+                    }
+                    that[stateName] = state.name;
+                    sails.emit("stateNext", that);
+                    that.save((err) => {
                         if (err)
                             reject(err);
-                        for (let i in result) {
-                            i = result[i];
-                            if (!i)
-                                reject('validation fail');
-                        }
-                        that[stateName] = state.name;
-                        sails.emit('stateNext', that);
-                        that.save((err) => {
-                            if (err)
-                                reject(err);
-                            resolve();
-                        });
+                        resolve();
                     });
-                }
-                else {
-                    reject('valid field is required');
-                }
-            });
-        },
-        getState: function () {
-            return this[stateName];
-        },
-        getStateObj: function () {
-            return sails.stateflow.filter(s => s.name === that[stateName])[0];
-        },
+                });
+            }
+            else {
+                reject("valid field is required");
+            }
+        });
+    },
+    getState: function () {
+        return this[stateName];
+    },
+    getStateObj: function () {
+        return sails.stateflow.filter((s) => s.name === that[stateName])[0];
     },
     /** Add state in current model */
     addState: function (state) {
@@ -100,12 +98,12 @@ module.exports = {
     // getStates: function () {
     //   return sails.stateflow;
     // },
-    beforeCreate: (values, cb) => {
-        values[stateName] = sails.stateflow[0].name;
-        return cb();
-    },
-    // afterCreate: (values, cb) => {
-    //   values[stateName] = stateStart.name;
+    // beforeCreate: (values, cb) => {
+    //   values[stateName] = sails.stateflow[0].name;
     //   return cb();
-    // }
+    // },
+    // // afterCreate: (values, cb) => {
+    // //   values[stateName] = stateStart.name;
+    // //   return cb();
+    // // }
 };

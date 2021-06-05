@@ -7,7 +7,7 @@ describe("Model", function () {
   describe("model order", async function () {
     it("Exist state field", async function () {
       attributes = Order.attributes;
-      console.log(attributes)
+      // console.log(attributes)
 
       if (!attributes.state) {
         throw "";
@@ -15,12 +15,9 @@ describe("Model", function () {
     });
 
     it("Exist method next()", async function () {
-      let o123 = await Order.create().fetch();
-      console.log("o123", o123)
-
-      // if (!Order.next && !(typeof Order.next === "function")) {
-      //   throw "";
-      // }
+      if (!Order.next && !(typeof Order.next === "function")) {
+        throw "";
+      }
     });
   });
 });
