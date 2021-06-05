@@ -1,3 +1,4 @@
+/** State instance */
 export declare class State {
     /** StateName without  spaces */
     name: string;

@@ -1,4 +1,6 @@
+/** State instance */
 export class State {
+  
   /** StateName without  spaces */
   name: string;
   /** All states to possible to shift next */

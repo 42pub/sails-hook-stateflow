@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.State = void 0;
+/** State instance */
 class State {
     constructor(opts, next, valid) {
         if (typeof opts === 'string') {

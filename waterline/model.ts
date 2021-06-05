@@ -56,6 +56,7 @@ module.exports = {
     },
   },
 
+  /** Add state in current model */
   addState: function (state) {
     if (!state || !state instanceof State)
       return false;
@@ -80,6 +81,8 @@ module.exports = {
     sails.stateflow.push(state);
     return true;
   },
+
+  /** Remove state from current model */
   removeState: function (stateName) {
     if (!stateName)
       return false;
@@ -99,15 +102,15 @@ module.exports = {
     sails.stateflow.splice(sails.stateflow.indexOf(state), 1);
     return state;
   },
-  getStates: function () {
-    return sails.stateflow;
-  },
+  // getStates: function () {
+  //   return sails.stateflow;
+  // },
   beforeCreate: (values, cb) => {
     values[stateName] = sails.stateflow[0].name;
     return cb();
   },
-  afterCreate: (values, cb) => {
-    values[stateName] = stateStart.name;
-    return cb();
-  }
+  // afterCreate: (values, cb) => {
+  //   values[stateName] = stateStart.name;
+  //   return cb();
+  // }
 };
