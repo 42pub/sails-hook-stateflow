@@ -1,7 +1,7 @@
-const State = require('../../models/State');
+const State = require('../models/State');
 
-let stateStart = sails.stateflow[0];
-const stateName = sails.config.stateflow.stateField;
+let stateStart = "INIT";
+const stateName = "state";
 
 // noinspection JSUnusedGlobalSymbols
 module.exports = {

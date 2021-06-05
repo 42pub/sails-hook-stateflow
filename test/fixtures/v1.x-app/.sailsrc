@@ -7,7 +7,6 @@
     "grunt": false,
     "sockets": false,
     "pubsub": false,
-    "orm": false,
     "i18n": false
   },
   "log": {

@@ -7,15 +7,19 @@ describe("Model", function () {
   describe("model order", async function () {
     it("Exist state field", async function () {
       attributes = Order.attributes;
+
       if (!attributes.state) {
         throw "";
       }
     });
 
     it("Exist method next()", async function () {
-      if (!Order.next && !(typeof Order.next === "function")) {
-        throw "";
-      }
+      let o123 = await Order.create().fetch();
+      console.log("o123")
+
+      // if (!Order.next && !(typeof Order.next === "function")) {
+      //   throw "";
+      // }
     });
   });
 });
