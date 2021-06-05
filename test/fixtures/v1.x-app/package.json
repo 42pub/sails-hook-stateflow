@@ -4,7 +4,8 @@
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
     "rc": "1.0.1",
-    "sails": "^1.4.3"
+    "sails": "^1.4.3",
+    "sails-hook-orm": "^3.0.2"
   },
   "main": "app.js"
 }
