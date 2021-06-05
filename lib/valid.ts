@@ -1,3 +1,3 @@
 module.exports = function (cb) {
-    cb(null, true);
+  cb(null, true);
 };

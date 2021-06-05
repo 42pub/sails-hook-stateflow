@@ -1,4 +1,5 @@
 const _ = require('lodash');
+
 module.exports = function initializeModel(sails) {
     /**
      * Merge models like inheritance
