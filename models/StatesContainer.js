@@ -1,4 +1,6 @@
-const State = require('./State');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const State_1 = require("./State");
 let states = [];
 module.exports = {
     getAll: function () {
@@ -8,7 +10,7 @@ module.exports = {
         let f = true;
         for (let i in state) {
             if (state.hasOwnProperty(i))
-                if (!state[i] instanceof State)
+                if (!state[i] instanceof State_1.State)
                     f = false;
         }
         if (!f)

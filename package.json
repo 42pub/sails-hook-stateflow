@@ -1,6 +1,8 @@
 {
   "description": "Stateflow for Sails",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/lodash": "^4.14.170"
+  },
   "main": "index.js",
   "name": "sails-hook-stateflow",
   "optionalDependencies": {},
@@ -9,5 +11,8 @@
     "hookName": "hookStateFlow"
   },
   "scripts": {},
-  "version": "0.2.0"
+  "version": "0.2.0",
+  "dependencies": {
+    "typed-sails": "git+https://github.com/42Sails/typed-sails.git"
+  }
 }

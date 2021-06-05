@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.State = void 0;
 class State {
     constructor(opts, next, valid) {
         if (typeof opts === 'string') {
@@ -5,12 +8,8 @@ class State {
             this.next = next;
             this.valid = valid;
         }
-        else {
-            this.name = opts.name;
-            this.next = opts.next;
-            this.valid = opts.valid;
-        }
     }
+    /** Add route for current state */
     addRoute(nextName) {
         if (!nextName || typeof nextName !== 'string')
             return false;
@@ -21,6 +20,7 @@ class State {
         this.next.push(nextName);
         return true;
     }
+    /** remove route for current state */
     removeRoute(nextName) {
         if (!nextName || typeof nextName !== 'string')
             return false;
@@ -31,4 +31,4 @@ class State {
         return true;
     }
 }
-module.exports = State;
+exports.State = State;

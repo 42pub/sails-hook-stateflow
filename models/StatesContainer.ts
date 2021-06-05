@@ -1,4 +1,4 @@
-const State = require('./State');
+import { State } from './State'
 
 let states = [];
 
