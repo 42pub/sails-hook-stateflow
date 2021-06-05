@@ -1,5 +1,4 @@
 {
-  //"extends": "../tslint",
   "globals": {
     "describe": true,
     "context": true,
