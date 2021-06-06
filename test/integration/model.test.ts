@@ -15,6 +15,9 @@ describe("Model", function () {
     });
 
     it("Exist method next()", async function () {
+
+      // let a = await Order.create({state: "init"}).fetch()
+      // console.log(a);
       if (!Order.next && !(typeof Order.next === "function")) {
         throw "";
       }

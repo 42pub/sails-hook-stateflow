@@ -1,13 +1,12 @@
 const State = require("../models/State");
 let stateStart = "INIT";
 const stateName = "state";
-// noinspection JSUnusedGlobalSymbols
+// 
 module.exports = {
-    next: function (name) {
-        const that = this;
+    next: function (modelInstanceData, name) {
         return new Promise((resolve, reject) => {
             if (!name) {
-                const state = sails.stateflow.filter((s) => s.name === that[stateName]);
+                const state = sails.stateflow.filter((s) => s.name === modelInstanceData[stateName]);
                 if (!state[0])
                     reject("current state invalid");
                 else {
@@ -32,9 +31,9 @@ module.exports = {
                         if (!i)
                             reject("validation fail");
                     }
-                    that[stateName] = state.name;
-                    sails.emit("stateNext", that);
-                    that.save((err) => {
+                    modelInstanceData[stateName] = state.name;
+                    sails.emit("stateNext", modelInstanceData);
+                    modelInstanceData.save((err) => {
                         if (err)
                             reject(err);
                         resolve();
@@ -46,14 +45,14 @@ module.exports = {
             }
         });
     },
-    getState: function () {
-        return this[stateName];
+    getState: function (modelInstanceData) {
+        return modelInstanceData[stateName];
     },
-    getStateObj: function () {
-        return sails.stateflow.filter((s) => s.name === that[stateName])[0];
+    getStateObj: function (modelInstanceData) {
+        return sails.stateflow.filter((s) => s.name === modelInstanceData[stateName])[0];
     },
     /** Add state in current model */
-    addState: function (state) {
+    addState: function (modelInstanceData, state) {
         if (!state || !state instanceof State)
             return false;
         if (sails.stateflow.indexOf(state) >= 0)
@@ -77,7 +76,7 @@ module.exports = {
         return true;
     },
     /** Remove state from current model */
-    removeState: function (stateName) {
+    removeState: function (modelInstanceData, stateName) {
         if (!stateName)
             return false;
         let exist = false;
@@ -95,4 +94,15 @@ module.exports = {
         sails.stateflow.splice(sails.stateflow.indexOf(state), 1);
         return state;
     },
+    // getStates: function () {
+    //   return sails.stateflow;
+    // },
+    // beforeCreate: (values, cb) => {
+    //   values[stateName] = sails.stateflow[0].name;
+    //   return cb();
+    // },
+    // // afterCreate: (values, cb) => {
+    // //   values[stateName] = stateStart.name;
+    // //   return cb();
+    // // }
 };

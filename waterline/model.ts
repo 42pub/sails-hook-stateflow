@@ -3,13 +3,12 @@ const State = require("../models/State");
 let stateStart = "INIT";
 const stateName = "state";
 
-// noinspection JSUnusedGlobalSymbols
+// 
 module.exports = {
-  next: function (name) {
-    const that = this;
+  next: function (modelInstanceData: any, name? :any) {
     return new Promise((resolve, reject) => {
       if (!name) {
-        const state = sails.stateflow.filter((s) => s.name === that[stateName]);
+        const state = sails.stateflow.filter((s) => s.name === modelInstanceData[stateName]);
         if (!state[0]) reject("current state invalid");
         else {
           if (state[0].next[0]) name = state[0].next[0];
@@ -32,10 +31,10 @@ module.exports = {
             if (!i) reject("validation fail");
           }
 
-          that[stateName] = state.name;
-          sails.emit("stateNext", that);
+          modelInstanceData[stateName] = state.name;
+          sails.emit("stateNext", modelInstanceData);
 
-          that.save((err) => {
+          modelInstanceData.save((err) => {
             if (err) reject(err);
             resolve();
           });
@@ -45,15 +44,15 @@ module.exports = {
       }
     });
   },
-  getState: function () {
-    return this[stateName];
+  getState: function (modelInstanceData: any,) {
+    return modelInstanceData[stateName];
   },
-  getStateObj: function () {
-    return sails.stateflow.filter((s) => s.name === that[stateName])[0];
+  getStateObj: function (modelInstanceData: any,) {
+    return sails.stateflow.filter((s) => s.name === modelInstanceData[stateName])[0];
   },
 
   /** Add state in current model */
-  addState: function (state) {
+  addState: function (modelInstanceData: any, state: any) {
     if (!state || !state instanceof State) return false;
     if (sails.stateflow.indexOf(state) >= 0) return false;
     if (!state.name || !state.next) return false;
@@ -75,7 +74,7 @@ module.exports = {
   },
 
   /** Remove state from current model */
-  removeState: function (stateName) {
+  removeState: function (modelInstanceData: any, stateName: string) {
     if (!stateName) return false;
     let exist = false;
     let state;
