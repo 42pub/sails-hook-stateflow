@@ -15,12 +15,18 @@ describe("Model", function () {
     });
 
     it("Exist method next()", async function () {
+      
+      await sleep(1236)
+      console.log(Order, NotOrder);
 
-      // let a = await Order.create({state: "init"}).fetch()
-      // console.log(a);
+       console.log(Order.time, NotOrder.time);
       if (!Order.next && !(typeof Order.next === "function")) {
         throw "";
       }
     });
   });
 });
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
