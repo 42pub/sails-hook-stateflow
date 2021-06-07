@@ -9,18 +9,34 @@ export default async function (sails: any) {
     const conf = sails.config.stateflow;
     Object.keys(conf.models).forEach((modelName) => {
       let modelname = modelName.toLowerCase();
+      let modelConf = conf.models[modelName]
+      let stateField = modelConf.stateField || "state";
+      let waterlineRequired = modelConf.waterlineRequired || false;
+      let startState;
+  
+      if(modelConf.waterlineRequired && modelConf.startState !== undefined)
+        throw `waterlineRequired & startState not allowed for combine`
 
-      let stateField = conf.models[modelName].stateField || "state";
-      let waterlineRequired = conf.models[modelName].waterlineRequired || false;
-      sails.models[modelname].attributes[stateField] = {
-        type: "string",
-        required: waterlineRequired,
+      if(modelConf.startState && !modelConf.states[modelConf.startState])
+        throw `Start state ${modelConf.startState} for model ${modelName} not present in states list`
+
+      if(!modelConf.startState && !waterlineRequired && modelConf.states)
+        modelConf.startState = modelConf.states[Object.keys(modelConf.states)[0]]
+
+      let field = {
+          type: "string",
+          required: waterlineRequired,
       };
 
-      let model = new Model({ ...conf.models[modelName], model: modelname });
+      if(!waterlineRequired)
+        field.defaultsTo = modelConf.startState
+
+      sails.models[modelname].attributes[stateField] = field
+
+      let model = new Model({ ...modelConf, model: modelname });
       _.merge(sails.models[modelname], model);
 
-      let states: {} = conf.models[modelName].states;
+      let states: {} = modelConf.states;
       if (states) {
         sails.models[modelname].states = {};
         Object.keys(states).forEach((state) => {

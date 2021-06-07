@@ -9,7 +9,7 @@ module.exports.stateflow = {
       /** Create attribute ofwaterline model with required option. by default false */
       waterlineRequired: true,
       /** If not defined, exit */
-      startState: "CART",
+
 
       states: {
         alpha: ["beta"],
@@ -21,8 +21,8 @@ module.exports.stateflow = {
 
     Order: {
       stateField: "state",
-      waterlineRequired: false,
-      statesInit: {
+      startState: "ONE",
+      states: {
         ONE: ["TWO"],
         TWO: ["THREE", "FOUR"],
         TRHEE: ["ONE", "FOUR"],
