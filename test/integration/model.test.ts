@@ -1,4 +1,4 @@
-//import { Model } from "waterline";
+import { Model } from "waterline";
 let attributes: Model;
 
 describe("Model", function () {
@@ -6,7 +6,7 @@ describe("Model", function () {
 
   describe("model order", async function () {
     it("Exist state field", async function () {
-      attributes = Order.attributes;
+      attributes = Order.atrtibutes;
       // console.log(attributes)
 
       if (!attributes.state) {

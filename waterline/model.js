@@ -1,21 +1,26 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const State = require("../models/State");
 let stateStart = "INIT";
-const stateName = "state";
 module.exports = function (config) {
     return {
         stateflowModelConfig: config,
-        next: function (modelInstanceData, name) {
+        states: {},
+        next: function (criteria, nextState) {
+            let modelInstanceData = this.findOne(criteria);
+            let stateField = this.stateflowModelConfig.stateField;
             return new Promise((resolve, reject) => {
+                /** Если куда перемещатся не передано:
+                 *  Проверяет если следующий роут всего один то перемещается на него,
+                 *  Если следующего роута нету, то выдает ошибку
+                 * */
                 if (!name) {
-                    const state = sails.stateflow.filter((s) => s.name === modelInstanceData[stateName]);
-                    if (!state[0])
-                        reject("current state invalid");
-                    else {
-                        if (state[0].next[0])
-                            name = state[0].next[0];
-                        else
-                            reject("current state has no next state");
-                    }
+                    // const state = sails.stateflow.filter((s) => s.name === modelInstanceData[stateField]);
+                    // if (!state[0]) reject("current state invalid");
+                    // else {
+                    //   if (state[0].next[0]) name = state[0].next[0];
+                    //   else reject("current state has no next state");
+                    // }
                 }
                 const stateFind = sails.stateflow.filter((s) => s !== undefined && s.name === name);
                 if (!stateFind)
@@ -32,7 +37,7 @@ module.exports = function (config) {
                             if (!i)
                                 reject("validation fail");
                         }
-                        modelInstanceData[stateName] = state.name;
+                        modelInstanceData[stateField] = state.name;
                         sails.emit("stateNext", modelInstanceData);
                         modelInstanceData.save((err) => {
                             if (err)
@@ -47,10 +52,10 @@ module.exports = function (config) {
             });
         },
         getState: function (modelInstanceData) {
-            return modelInstanceData[stateName];
+            return modelInstanceData[stateField];
         },
         getStateObj: function (modelInstanceData) {
-            return sails.stateflow.filter((s) => s.name === modelInstanceData[stateName])[0];
+            return sails.stateflow.filter((s) => s.name === modelInstanceData[stateField])[0];
         },
         /** Add state in current model */
         addState: function (modelInstanceData, state) {
@@ -77,14 +82,14 @@ module.exports = function (config) {
             return true;
         },
         /** Remove state from current model */
-        removeState: function (modelInstanceData, stateName) {
-            if (!stateName)
+        removeState: function (modelInstanceData, stateField) {
+            if (!stateField)
                 return false;
             let exist = false;
             let state;
             for (let s in sails.stateflow) {
                 s = sails.stateflow[s];
-                if (s.name === stateName) {
+                if (s.name === stateField) {
                     exist = true;
                     state = s;
                     break;
