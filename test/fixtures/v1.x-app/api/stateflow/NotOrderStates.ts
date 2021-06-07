@@ -3,7 +3,7 @@ module.exports = {
     routeRules: async function (): Promise<string> {
       return "true";
     },
-    beforStateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (): Promise<boolean> {
       return true;
     },
     inState: async function (): Promise<void> {
@@ -17,7 +17,7 @@ module.exports = {
     routeRules: async function (): Promise<string> {
       return "true";
     },
-    beforStateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (): Promise<boolean> {
       return true;
     },
     inState: async function (): Promise<void> {
@@ -31,7 +31,7 @@ module.exports = {
     routeRules: async function (): Promise<string> {
       return "true";
     },
-    beforStateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (): Promise<boolean> {
       return true;
     },
     inState: async function (): Promise<void> {
@@ -45,7 +45,7 @@ module.exports = {
     routeRules: async function (): Promise<string> {
       return "true";
     },
-    beforStateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (): Promise<boolean> {
       return true;
     },
     inState: async function (): Promise<void> {

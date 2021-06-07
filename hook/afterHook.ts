@@ -31,7 +31,7 @@ export default async function (sails: any) {
           );
           let statesApi: string;
           let routeRules: void,
-            beforStateValidation: void,
+            stateValidation: void,
             inState: void,
             afterState: void;
 
@@ -40,8 +40,8 @@ export default async function (sails: any) {
             if (statesApi[state]) {
               if (statesApi[state].routeRules)
                 routeRules = statesApi[state].routeRules;
-              if (statesApi[state].beforStateValidation)
-                beforStateValidation = statesApi[state].beforStateValidation;
+              if (statesApi[state].stateValidation)
+                stateValidation = statesApi[state].stateValidation;
               if (statesApi[state].inState) inState = statesApi[state].inState;
               if (statesApi[state].afterState)
                 afterState = statesApi[state].afterState;
@@ -52,7 +52,7 @@ export default async function (sails: any) {
             state,
             states[state],
             routeRules,
-            beforStateValidation,
+            stateValidation,
             inState,
             afterState
           );

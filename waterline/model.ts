@@ -6,7 +6,7 @@ module.exports = function(config) {
   return {
     stateflowModelConfig: config,
     states: {},
-    next: function (criteria: any, nextState? :any) {
+    next: async function (criteria: any, nextState? :any) {
       let modelInstanceData
       try {
         modelInstanceData = this.findOne(criteria)
@@ -15,13 +15,30 @@ module.exports = function(config) {
       }
       let stateField: string = this.stateflowModelConfig.stateField;
 
-      return new Promise((resolve, reject) => {
-        /** Если куда перемещатся не передано: 
-         *  Проверяет если следующий роут всего один то перемещается на него,
-         *  Если следующего роута нету, то выдает ошибку
-         * */
-        
-      });
+      if (nextState && !sails.models[this.globalId.toLowerCase()].states[nextState]) 
+        throw `state with name ${nextState} not present in ${this.globalId} model`
+
+      if (nextState && !(await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].checkRoute(nextState)))
+        throw `route for  ${nextState} don't preset in current state`
+
+      if (!nextState)
+        nextState = await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].getNextState(modelInstanceData)
+
+      if (!nextState)
+        throw "State for next not defined"
+      
+      try {
+        await sails.models[this.globalId.toLowerCase()].states[nextState].runStateValidation(modelInstanceData)
+      } catch (error) {
+        throw `move to  ${nextState} ended with error: ${error}`
+      }  
+
+      await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].runAfterState(modelInstanceData)
+            
+      let update = {}
+      update[stateField] = nextState;
+      modelInstanceData = (await this.update({criteria},update).fetch())[0]
+      await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].runAfterState(modelInstanceData)
     },
     getState: function (criteria: any) {
       let modelInstanceData
@@ -48,7 +65,7 @@ module.exports = function(config) {
     /** Add state in current model */
     addState: function (state: string, routes: string[], 
       routeRules: void,
-      beforStateValidation: void,
+      stateValidation: void,
       inState: void,
       afterState: void
       ) {
@@ -63,7 +80,7 @@ module.exports = function(config) {
           state,
           routes,
           routeRules,
-          beforStateValidation,
+          stateValidation,
           inState,
           afterState
         );        

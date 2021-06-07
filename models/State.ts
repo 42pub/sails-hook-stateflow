@@ -9,7 +9,7 @@ export class State {
   routes: string[];
 
   /** Array with validations */
-  beforStateValidation: ((data: object, cb:(a: string) => void) => void)[] = [];
+  stateValidation: ((data: object, cb:(a: string) => void) => void)[] = [];
 
   /** Array with current state callbacks */
   inState: void[] = [];
@@ -22,7 +22,7 @@ export class State {
    *
    * @param name Name of State
    * @param routes Array of possible displacements
-   * @param beforStateValidation Array with validations
+   * @param stateValidation Array with validations
    * @param inState Array with current state callbacks
    * @param afterState Array with afterstate callbacks
    */
@@ -30,7 +30,7 @@ export class State {
     name: string,
     routes: string[],
     routeRules: void,
-    beforStateValidation: void,
+    stateValidation: void,
     inState: void,
     afterState: void
   ) {
@@ -38,11 +38,22 @@ export class State {
     this.name = name;
     this.routes = routes;
 
-    if (beforStateValidation !== undefined) this.beforStateValidation.push(beforStateValidation);
-    if (inState !== undefined) this.beforStateValidation.push(inState);
-    if (afterState !== undefined) this.beforStateValidation.push(afterState);
+    if (stateValidation !== undefined) this.stateValidation.push(stateValidation);
+    if (inState !== undefined) this.stateValidation.push(inState);
+    if (afterState !== undefined) this.stateValidation.push(afterState);
     if (routeRules !== undefined) this.routeRules.push(routeRules);
   }
+
+  /** Add special route for current state */
+  checkRoute(stateName: string) {
+    if (!stateName || typeof stateName !== "string") throw "stateName required";
+    if (this.routes.indexOf(stateName) >= 0){
+      return true;
+    } else {
+      return false;
+    } 
+  }
+
 
   /** Add special route for current state */
   addRoute(stateName: string) {
@@ -61,10 +72,10 @@ export class State {
     return true;
   }
 
-  async runBeforStateValidation(data: any){
+  async runStateValidation(data: any){
     let error: string;
-    for await(let layerBeforStateValidation of this.beforStateValidation) {
-      await layerBeforStateValidation(data, (e) => {
+    for await(let layerstateValidation of this.stateValidation) {
+      await layerstateValidation(data, (e) => {
         if (e) error = e;
       })
       if(error) break;
@@ -74,7 +85,7 @@ export class State {
 
   async runInState(data: any){
     let error: string;
-    for await (let layerRunInState of this.beforStateValidation) {
+    for await (let layerRunInState of this.stateValidation) {
       await layerRunInState(data, (e) => {
         if (e) error = e;
       })
@@ -85,7 +96,7 @@ export class State {
 
   async runAfterState(data: any){
     let error: string;
-    for await(let layerRunAfterState of this.beforStateValidation) {
+    for await(let layerRunAfterState of this.stateValidation) {
       await layerRunAfterState(data, (e) => {
         if (e) error = e;
       })
@@ -94,15 +105,15 @@ export class State {
     throw error;
   }
 
-  async runRouteRules(data: any){
+  async getNextState(data: any){
     let nextState: string;
-    for await(let layerRunAfterState of this.beforStateValidation) {
+    for await(let layerRunAfterState of this.stateValidation) {
       await layerRunAfterState(data, (ns) => {
         if (ns) nextState = ns;
       })
       if(nextState) break;
     }
-    throw nextState;
+    return nextState;
   }
 
 }

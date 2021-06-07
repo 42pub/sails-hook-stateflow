@@ -8,7 +8,7 @@ module.exports.stateflow = {
       /** Create attribute ofwaterline model with required option. by default false */
       waterlineRequired: false,
       /** If not defined, call by default in sails.models[model].states() */
-      beforStateValidation: require("."),
+      stateValidation: require("."),
       inStateCallback:require("."),
       afterState: require("."),
     }
