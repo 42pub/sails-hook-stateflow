@@ -33,11 +33,12 @@
 
 ### TODO
 1. Add states by config 🗹
-2. Add/Remove states by API
-3. Add/Remove routes by API 
-4. Validation beforeNext()
-5. Select next state by cutom routes 
+2. Add/Remove states by API 🗹
+3. Add/Remove routes by API 🗹
+4. Validation beforeNext() 🗹
+5. Select next state by cutom routes 🗹
 6. List of all routes
+7. error when create model with not startState
 
 
 
