@@ -1,5 +1,5 @@
 {
-  "description": "Stateflow for Sails",
+  "description": "State framework for SailsJS",
   "devDependencies": {
     "@types/bluebird": "^3.5.32",
     "@types/bluebird-global": "^3.5.12",
@@ -36,7 +36,7 @@
     "test:js": "tsc ; mocha test/_bootstrap.js test/**/*.test.js",
     "test:init": "cd ./test/fixtures/v1.x-app && npm i --no-package-lock --prefix ./ && cd -"
   },
-  "version": "0.2.0",
+  "version": "1.0.0",
   "dependencies": {
     "typed-sails": "git+https://github.com/42Sails/typed-sails.git",
     "typescript": "^4.3.2"
