@@ -1,4 +1,4 @@
-//const State = require('sails-hook-stateflow').State;
+
 module.exports.stateflow = {
   models: {
     /** If no model defined in sails.config.stateflow, hook use Order model */
@@ -20,7 +20,6 @@ module.exports.stateflow = {
     },
 
     Order: {
-      stateField: "state",
       startState: "ONE",
       states: {
         ONE: ["TWO"],

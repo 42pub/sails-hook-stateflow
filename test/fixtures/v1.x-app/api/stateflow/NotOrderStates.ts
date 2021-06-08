@@ -1,57 +1,57 @@
 module.exports = {
   alpha: {
-    routeRules: async function (): Promise<string> {
+    routeRules: async function (data, cb): Promise<string> {
       return "true";
     },
-    stateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (data, cb): Promise<void> {
       return true;
     },
-    inState: async function (): Promise<void> {
+    inState: async function (data, cb): Promise<void> {
       return;
     },
-    afterState: async function (): Promise<void> {
+    afterState: async function (data, cb): Promise<void> {
       return;
     },
   },
   beta: {
-    routeRules: async function (): Promise<string> {
+    routeRules: async function (data, cb): Promise<string> {
       return "true";
     },
-    stateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (data, cb): Promise<void> {
       return true;
     },
-    inState: async function (): Promise<void> {
+    inState: async function (data, cb): Promise<void> {
       return;
     },
-    afterState: async function (): Promise<void> {
+    afterState: async function (data, cb): Promise<void> {
       return;
     },
   },
   gama: {
-    routeRules: async function (): Promise<string> {
+    routeRules: async function (data, cb): Promise<string> {
       return "true";
     },
-    stateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (data, cb): Promise<void> {
       return true;
     },
-    inState: async function (): Promise<void> {
+    inState: async function (data, cb): Promise<void> {
       return;
     },
-    afterState: async function (): Promise<void> {
+    afterState: async function (data, cb): Promise<void> {
       return;
     },
   },
   zeta: {
-    routeRules: async function (): Promise<string> {
+    routeRules: async function (data, cb): Promise<string> {
       return "true";
     },
-    stateValidation: async function (): Promise<boolean> {
+    stateValidation: async function (data, cb): Promise<void> {
       return true;
     },
-    inState: async function (): Promise<void> {
+    inState: async function (data, cb): Promise<void> {
       return;
     },
-    afterState: async function (): Promise<void> {
+    afterState: async function (data, cb): Promise<void> {
       return;
     },
   },

@@ -80,7 +80,7 @@ export class State {
       })
       if(error) break;
     }
-    throw error;
+    if (error) throw error
   } 
 
   async runInState(data: any){
@@ -91,7 +91,7 @@ export class State {
       })
       if(error) break;
     }
-    throw error;
+    if (error) throw error
   }
 
   async runAfterState(data: any){
@@ -102,18 +102,23 @@ export class State {
       })
       if(error) break;
     }
-    throw error;
+    if (error) throw error
   }
 
   async getNextState(data: any){
     let nextState: string;
+    
+    if (this.routes.length === 1) {
+      return this.routes[0]
+    }
+
     for await(let layerRunAfterState of this.stateValidation) {
       await layerRunAfterState(data, (ns) => {
         if (ns) nextState = ns;
       })
       if(nextState) break;
     }
-    return nextState;
+    if (nextState) throw nextState
   }
 
 }

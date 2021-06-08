@@ -11,9 +11,9 @@ async function default_1(sails) {
         Object.keys(conf.models).forEach((modelName) => {
             let modelname = modelName.toLowerCase();
             let modelConf = conf.models[modelName];
-            let stateField = modelConf.statesField || "state";
+            let stateField;
+            modelConf.stateField = stateField = modelConf.stateField || "state";
             let waterlineRequired = modelConf.waterlineRequired || false;
-            let startState;
             if (modelConf.waterlineRequired && modelConf.startState !== undefined)
                 throw `waterlineRequired & startState not allowed for combine`;
             if (modelConf.startState && !modelConf.states[modelConf.startState])
