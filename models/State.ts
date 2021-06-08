@@ -12,12 +12,12 @@ export class State {
   stateValidation: ((data: object, cb:(a: string) => void) => void)[] = [];
 
   /** Array with current state callbacks */
-  inState: void[] = [];
+  inState:  ((data: object, cb:(a: string) => void) => void)[] = [];
 
   /** Array with afterstate callbacks */
-  afterState: void[] = [];
+  afterState: ((data: object, cb:(a: string) => void) => void)[] = [];
 
-  routeRules: void[] = [];
+  routeRules: ((data: object, route:(a: string) => void) => void)[] = [];
   /**
    *
    * @param name Name of State
@@ -85,7 +85,7 @@ export class State {
 
   async runInState(data: any){
     let error: string;
-    for await (let layerRunInState of this.stateValidation) {
+    for await (let layerRunInState of this.inState) {
       await layerRunInState(data, (e) => {
         if (e) error = e;
       })
@@ -96,7 +96,7 @@ export class State {
 
   async runAfterState(data: any){
     let error: string;
-    for await(let layerRunAfterState of this.stateValidation) {
+    for await(let layerRunAfterState of this.afterState) {
       await layerRunAfterState(data, (e) => {
         if (e) error = e;
       })
@@ -112,13 +112,13 @@ export class State {
       return this.routes[0]
     }
 
-    for await(let layerRunAfterState of this.stateValidation) {
+    for await(let layerRunAfterState of this.routeRules) {
       await layerRunAfterState(data, (ns) => {
         if (ns) nextState = ns;
       })
       if(nextState) break;
     }
-    if (nextState) throw nextState
+    if (nextState) return nextState
   }
 
 }

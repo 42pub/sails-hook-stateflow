@@ -22,6 +22,8 @@ module.exports = function (config) {
                 throw `route for  ${nextState} don't preset in current state`;
             if (!nextState)
                 nextState = await sails.models[modelname].state[modelInstanceData[stateField]].getNextState(modelInstanceData);
+            if (sails.models[modelname].state[nextState] === undefined)
+                throw `State with name ${nextState} not found`;
             if (!nextState)
                 throw "State for next not defined";
             try {
