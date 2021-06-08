@@ -39,8 +39,8 @@ export class State {
     this.routes = routes;
 
     if (stateValidation !== undefined) this.stateValidation.push(stateValidation);
-    if (inState !== undefined) this.stateValidation.push(inState);
-    if (afterState !== undefined) this.stateValidation.push(afterState);
+    if (inState !== undefined) this.inState.push(inState);
+    if (afterState !== undefined) this.afterState.push(afterState);
     if (routeRules !== undefined) this.routeRules.push(routeRules);
   }
 

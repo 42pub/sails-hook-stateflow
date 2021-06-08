@@ -10,7 +10,7 @@ export default async function (sails: any) {
     Object.keys(conf.models).forEach((modelName) => {
       let modelname = modelName.toLowerCase();
       let modelConf = conf.models[modelName]
-      let stateField = modelConf.stateField || "state";
+      let stateField = modelConf.statesField || "state";
       let waterlineRequired = modelConf.waterlineRequired || false;
       let startState;
   
@@ -38,7 +38,7 @@ export default async function (sails: any) {
 
       let states: {} = modelConf.states;
       if (states) {
-        sails.models[modelname].states = {};
+        sails.models[modelname].state = {};
         Object.keys(states).forEach((state) => {
           let statesApiPath = path.resolve(
             process.cwd(),
@@ -64,7 +64,7 @@ export default async function (sails: any) {
             }
           }
 
-          sails.models[modelname].states[state] = new State(
+          sails.models[modelname].state[state] = new State(
             state,
             states[state],
             routeRules,

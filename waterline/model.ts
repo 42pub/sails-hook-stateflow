@@ -15,30 +15,30 @@ module.exports = function(config) {
       }
       let stateField: string = this.stateflowModelConfig.stateField;
 
-      if (nextState && !sails.models[this.globalId.toLowerCase()].states[nextState]) 
+      if (nextState && !sails.models[this.globalId.toLowerCase()].state[nextState]) 
         throw `state with name ${nextState} not present in ${this.globalId} model`
 
-      if (nextState && !(await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].checkRoute(nextState)))
+      if (nextState && !(await sails.models[this.globalId.toLowerCase()].state[modelInstanceData[stateField]].checkRoute(nextState)))
         throw `route for  ${nextState} don't preset in current state`
 
       if (!nextState)
-        nextState = await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].getNextState(modelInstanceData)
+        nextState = await sails.models[this.globalId.toLowerCase()].state[modelInstanceData[stateField]].getNextState(modelInstanceData)
 
       if (!nextState)
         throw "State for next not defined"
       
       try {
-        await sails.models[this.globalId.toLowerCase()].states[nextState].runStateValidation(modelInstanceData)
+        await sails.models[this.globalId.toLowerCase()].state[nextState].runStateValidation(modelInstanceData)
       } catch (error) {
         throw `move to  ${nextState} ended with error: ${error}`
       }  
 
-      await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].runAfterState(modelInstanceData)
+      await sails.models[this.globalId.toLowerCase()].state[modelInstanceData[stateField]].runAfterState(modelInstanceData)
             
       let update = {}
       update[stateField] = nextState;
       modelInstanceData = (await this.update({criteria},update).fetch())[0]
-      await sails.models[this.globalId.toLowerCase()].states[modelInstanceData[stateField]].runAfterState(modelInstanceData)
+      await sails.models[this.globalId.toLowerCase()].state[modelInstanceData[stateField]].runAfterState(modelInstanceData)
     },
     getState: function (criteria: any) {
       let modelInstanceData
@@ -59,7 +59,7 @@ module.exports = function(config) {
         sails.log.error(error)
       }
 
-      return this.states[modelInstanceData[stateField]];
+      return this.state[modelInstanceData[stateField]];
     },
   
     /** Add state in current model */
@@ -71,7 +71,7 @@ module.exports = function(config) {
       ) {
       
 
-      if(sails.models[this.globalId.toLowerCase()].states[state]) 
+      if(sails.models[this.globalId.toLowerCase()].state[state]) 
         throw `State with name: ${state} present in model`
       
       let newState: State;
@@ -88,7 +88,7 @@ module.exports = function(config) {
         
       }
 
-      sails.models[this.globalId.toLowerCase()].states[state] = newState
+      sails.models[this.globalId.toLowerCase()].state[state] = newState
       return true;
     },
   

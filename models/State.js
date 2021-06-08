@@ -3,33 +3,112 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.State = void 0;
 /** State instance */
 class State {
-    constructor(opts, next, valid) {
-        if (typeof opts === 'string') {
-            this.name = opts;
-            this.next = next;
-            this.valid = valid;
+    /**
+     *
+     * @param name Name of State
+     * @param routes Array of possible displacements
+     * @param stateValidation Array with validations
+     * @param inState Array with current state callbacks
+     * @param afterState Array with afterstate callbacks
+     */
+    constructor(name, routes, routeRules, stateValidation, inState, afterState) {
+        /** Array with validations */
+        this.stateValidation = [];
+        /** Array with current state callbacks */
+        this.inState = [];
+        /** Array with afterstate callbacks */
+        this.afterState = [];
+        this.routeRules = [];
+        if (!name || !routes)
+            throw "name & routes arguments required";
+        this.name = name;
+        this.routes = routes;
+        if (stateValidation !== undefined)
+            this.stateValidation.push(stateValidation);
+        if (inState !== undefined)
+            this.inState.push(inState);
+        if (afterState !== undefined)
+            this.afterState.push(afterState);
+        if (routeRules !== undefined)
+            this.routeRules.push(routeRules);
+    }
+    /** Add special route for current state */
+    checkRoute(stateName) {
+        if (!stateName || typeof stateName !== "string")
+            throw "stateName required";
+        if (this.routes.indexOf(stateName) >= 0) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
-    /** Add route for current state */
-    addRoute(nextName) {
-        if (!nextName || typeof nextName !== 'string')
+    /** Add special route for current state */
+    addRoute(stateName) {
+        if (!stateName || typeof stateName !== "string")
+            throw "stateName required";
+        if (this.routes.indexOf(stateName) >= 0)
             return false;
-        if (nextName === 'CANCELED')
-            return false;
-        if (this.next.indexOf(nextName) >= 0)
-            return false;
-        this.next.push(nextName);
+        this.routes.push(stateName);
         return true;
     }
-    /** remove route for current state */
-    removeRoute(nextName) {
-        if (!nextName || typeof nextName !== 'string')
-            return false;
-        const ind = this.next.indexOf(nextName);
+    /** Remove route for current state */
+    removeRoute(stateName) {
+        if (!stateName || typeof stateName !== "string")
+            throw "stateName required";
+        const ind = this.routes.indexOf(stateName);
         if (ind < 0)
             return false;
-        this.next.splice(ind, 1);
+        this.routes.splice(ind, 1);
         return true;
+    }
+    async runStateValidation(data) {
+        let error;
+        for await (let layerstateValidation of this.stateValidation) {
+            await layerstateValidation(data, (e) => {
+                if (e)
+                    error = e;
+            });
+            if (error)
+                break;
+        }
+        throw error;
+    }
+    async runInState(data) {
+        let error;
+        for await (let layerRunInState of this.stateValidation) {
+            await layerRunInState(data, (e) => {
+                if (e)
+                    error = e;
+            });
+            if (error)
+                break;
+        }
+        throw error;
+    }
+    async runAfterState(data) {
+        let error;
+        for await (let layerRunAfterState of this.stateValidation) {
+            await layerRunAfterState(data, (e) => {
+                if (e)
+                    error = e;
+            });
+            if (error)
+                break;
+        }
+        throw error;
+    }
+    async getNextState(data) {
+        let nextState;
+        for await (let layerRunAfterState of this.stateValidation) {
+            await layerRunAfterState(data, (ns) => {
+                if (ns)
+                    nextState = ns;
+            });
+            if (nextState)
+                break;
+        }
+        return nextState;
     }
 }
 exports.State = State;

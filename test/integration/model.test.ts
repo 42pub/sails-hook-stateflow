@@ -25,6 +25,13 @@ describe("Model", function () {
       }
     });
 
+    it("Stateflow model has state callbacks", async function () {
+      console.log(Order.state.ONE)
+      if (true) {
+        throw "";
+      }
+    });
+
   });
 });
 

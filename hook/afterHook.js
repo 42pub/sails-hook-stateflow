@@ -11,7 +11,7 @@ async function default_1(sails) {
         Object.keys(conf.models).forEach((modelName) => {
             let modelname = modelName.toLowerCase();
             let modelConf = conf.models[modelName];
-            let stateField = modelConf.stateField || "state";
+            let stateField = modelConf.statesField || "state";
             let waterlineRequired = modelConf.waterlineRequired || false;
             let startState;
             if (modelConf.waterlineRequired && modelConf.startState !== undefined)
@@ -31,7 +31,7 @@ async function default_1(sails) {
             _.merge(sails.models[modelname], model);
             let states = modelConf.states;
             if (states) {
-                sails.models[modelname].states = {};
+                sails.models[modelname].state = {};
                 Object.keys(states).forEach((state) => {
                     let statesApiPath = path.resolve(process.cwd(), "api/stateflow/", sails.models[modelname].globalId + "States.js");
                     let statesApi;
@@ -49,7 +49,7 @@ async function default_1(sails) {
                                 afterState = statesApi[state].afterState;
                         }
                     }
-                    sails.models[modelname].states[state] = new State_1.State(state, states[state], routeRules, stateValidation, inState, afterState);
+                    sails.models[modelname].state[state] = new State_1.State(state, states[state], routeRules, stateValidation, inState, afterState);
                 });
             }
         });
