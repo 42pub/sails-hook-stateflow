@@ -23,6 +23,7 @@ async function default_1(sails) {
             let field = {
                 type: "string",
                 required: waterlineRequired,
+                isIn: Object.keys(modelConf.states)
             };
             if (!waterlineRequired)
                 field.defaultsTo = modelConf.startState;

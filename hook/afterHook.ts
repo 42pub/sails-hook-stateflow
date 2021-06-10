@@ -28,6 +28,7 @@ export default async function (sails: any) {
       let field = {
           type: "string",
           required: waterlineRequired,
+          isIn: Object.keys(modelConf.states)
       };
 
       if(!waterlineRequired)
