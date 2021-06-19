@@ -54,7 +54,6 @@ async function default_1(sails) {
                 });
             }
         });
-        console.log(">>>1");
     }
     catch (e) {
         sails.log.error("StateFlow > afterHook > LoadError", e);
