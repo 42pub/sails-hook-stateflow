@@ -34,13 +34,6 @@ module.exports = function (config) {
                 sails.log.debug(`StateFlow next() > runStateValidation error: ${error}`);
                 throw `runStateValidation to ${nextState} ended with error: ${error}`;
             }
-            try {
-                await sails.models[modelname].state[modelInstanceData[stateField]].runAfterState(modelInstanceData);
-            }
-            catch (error) {
-                sails.log.debug(`StateFlow next() > runAfterState error: ${error}`);
-                throw `runAfterState in ${modelInstanceData[stateField]} ended with error: ${error}`;
-            }
             /**
              * нужно сначало сохранять потомучто внутри одного next может быть другой.
              */
@@ -53,6 +46,13 @@ module.exports = function (config) {
             catch (error) {
                 sails.log.debug(`StateFlow next() > runInState error: ${error}`);
                 throw `instate in ${nextState} ended with error: ${error}`;
+            }
+            try {
+                await sails.models[modelname].state[modelInstanceData[stateField]].runAfterState(modelInstanceData);
+            }
+            catch (error) {
+                sails.log.debug(`StateFlow next() > runAfterState error: ${error}`);
+                throw `runAfterState in ${modelInstanceData[stateField]} ended with error: ${error}`;
             }
         },
         getState: async function (criteria) {
