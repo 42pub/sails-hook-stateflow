@@ -14,8 +14,10 @@ async function default_1(sails) {
             let stateField;
             modelConf.stateField = stateField = modelConf.stateField || "state";
             let waterlineRequired = modelConf.waterlineRequired || false;
+            /** Config without startState  (circle flows) */
             if (modelConf.waterlineRequired && modelConf.startState !== undefined)
                 throw `waterlineRequired & startState not allowed for combine`;
+            /** Config with startState defined */
             if (modelConf.startState && !modelConf.states[modelConf.startState])
                 throw `Start state ${modelConf.startState} for model ${modelName} not present in states list`;
             if (!modelConf.startState && !waterlineRequired && modelConf.states)
@@ -58,6 +60,23 @@ async function default_1(sails) {
                     }
                     sails.models[modelname].state[state] = new State_1.State(state, states[state], routeRules, stateValidation, inState, afterState);
                 });
+                /** Нужно сделать проверку чтобы нельзя было записать новую звпись в БД с отличным от старСтейт состоянием   */
+                /** Tick runInState when create model instance */
+                let afterCreate = sails.models[modelname].afterCreate !== undefined ? sails.models[modelname].afterCreate : undefined; // ??
+                sails.models[modelname].afterCreate = async function (values, cb) {
+                    let state = values.state ? values.state : modelConf.startState;
+                    if (!state) {
+                        throw "Start state is not defined";
+                    }
+                    console.log(state, sails.models[modelname].state);
+                    sails.models[modelname].state[state].runInState(values);
+                    if (afterCreate) {
+                        afterCreate(values, cb);
+                    }
+                    else {
+                        cb();
+                    }
+                };
             }
         });
     }

@@ -15,10 +15,12 @@ export default async function (sails: any) {
       modelConf.stateField = stateField = modelConf.stateField || "state";
       
       let waterlineRequired = modelConf.waterlineRequired || false;
-  
+      
+      /** Config without startState  (circle flows) */
       if(modelConf.waterlineRequired && modelConf.startState !== undefined)
         throw `waterlineRequired & startState not allowed for combine`
 
+      /** Config with startState defined */
       if(modelConf.startState && !modelConf.states[modelConf.startState])
         throw `Start state ${modelConf.startState} for model ${modelName} not present in states list`
 
@@ -82,6 +84,28 @@ export default async function (sails: any) {
             afterState
           );
         });
+
+        /** Нужно сделать проверку чтобы нельзя было записать новую звпись в БД с отличным от старСтейт состоянием   */
+
+        /** Tick runInState when create model instance */ 
+
+        let afterCreate = sails.models[modelname].afterCreate !== undefined ? sails.models[modelname].afterCreate : undefined; // ??
+        
+        sails.models[modelname].afterCreate = async function (values, cb ) {
+          let state = values.state ? values.state : modelConf.startState;
+          if (!state){
+            throw "Start state is not defined"
+          }
+          console.log(state, sails.models[modelname].state);
+          sails.models[modelname].state[state].runInState(values);
+          if (afterCreate) {
+            afterCreate(values, cb);
+          } else {
+            cb();
+          }
+        };
+
+
       }
     });
   } catch (e) {

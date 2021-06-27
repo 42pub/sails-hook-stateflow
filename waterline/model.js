@@ -22,7 +22,8 @@ module.exports = function (config) {
                 throw "State for next not defined";
             if (nextState && !sails.models[modelname].state[nextState])
                 throw `state with name ${nextState} not present in ${this.globalId} model`;
-            if (nextState && !(await sails.models[modelname].state[modelInstanceData[stateField]].checkRoute(nextState)))
+            if (nextState &&
+                !(await sails.models[modelname].state[modelInstanceData[stateField]].checkRoute(nextState)))
                 throw `route for  ${nextState} don't preset in current state`;
             if (sails.models[modelname].state[nextState] === undefined)
                 throw `State with name ${nextState} not found`;
@@ -32,6 +33,13 @@ module.exports = function (config) {
             catch (error) {
                 sails.log.debug(`StateFlow next() > runStateValidation error: ${error}`);
                 throw `runStateValidation to ${nextState} ended with error: ${error}`;
+            }
+            try {
+                await sails.models[modelname].state[modelInstanceData[stateField]].runAfterState(modelInstanceData);
+            }
+            catch (error) {
+                sails.log.debug(`StateFlow next() > runAfterState error: ${error}`);
+                throw `runAfterState in ${modelInstanceData[stateField]} ended with error: ${error}`;
             }
             /**
              * нужно сначало сохранять потомучто внутри одного next может быть другой.
@@ -45,13 +53,6 @@ module.exports = function (config) {
             catch (error) {
                 sails.log.debug(`StateFlow next() > runInState error: ${error}`);
                 throw `instate in ${nextState} ended with error: ${error}`;
-            }
-            try {
-                await sails.models[modelname].state[modelInstanceData[stateField]].runAfterState(modelInstanceData);
-            }
-            catch (error) {
-                sails.log.debug(`StateFlow next() > runAfterState error: ${error}`);
-                throw `runAfterState in ${modelInstanceData[stateField]} ended with error: ${error}`;
             }
         },
         getState: async function (criteria) {
@@ -84,14 +85,13 @@ module.exports = function (config) {
             try {
                 newState = new State_1.State(state, routes, routeRules, stateValidation, inState, afterState);
             }
-            catch (error) {
-            }
+            catch (error) { }
             sails.models[this.globalId.toLowerCase()].state[state] = newState;
             return true;
         },
         /** Remove state from current model */
         removeState: function (stateField) {
             throw "Just delete prop";
-        }
+        },
     };
 };
