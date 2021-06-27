@@ -37,11 +37,12 @@ module.exports = function(config) {
         throw `move to ${nextState} ended with error: ${error}`
       }  
 
-      await sails.models[modelname].state[modelInstanceData[stateField]].runInState(modelInstanceData)
-            
+      await sails.models[modelname].state[modelInstanceData[nextState]].runInState(modelInstanceData)
+      
       let update = {}
       update[stateField] = nextState;
       modelInstanceData = (await this.update(criteria, update).fetch())[0]
+      
       await sails.models[modelname].state[modelInstanceData[stateField]].runAfterState(modelInstanceData)
     },
     getState: async function (criteria: any) {

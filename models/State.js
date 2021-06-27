@@ -77,7 +77,9 @@ class State {
     }
     async runInState(data) {
         let error;
+        console.log("tst2", this.inState);
         for await (let layerRunInState of this.inState) {
+            console.log("tst", layerRunInState);
             await layerRunInState(data, (e) => {
                 if (e)
                     error = e;
