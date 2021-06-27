@@ -23,7 +23,12 @@ async function default_1(sails) {
             let field = {
                 type: "string",
                 required: waterlineRequired,
-                isIn: Object.keys(modelConf.states)
+                /**
+                 * This not accesed add state in runtime
+                 * but this need implement
+                 * */
+                // TODO: Add isIn In runtime
+                //isIn: Object.keys(modelConf.states)
             };
             if (!waterlineRequired)
                 field.defaultsTo = modelConf.startState;
@@ -49,6 +54,7 @@ async function default_1(sails) {
                             if (statesApi[state].afterState)
                                 afterState = statesApi[state].afterState;
                         }
+                        sails.log.verbose(`StateFlow > state (${state}) loaded from ${statesApiPath}, for\n routeRules: ${typeof (routeRules)},\n stateValidation: ${typeof (stateValidation)},\n inState: ${typeof (inState)}\n afterState: ${typeof (afterState)}`);
                     }
                     sails.models[modelname].state[state] = new State_1.State(state, states[state], routeRules, stateValidation, inState, afterState);
                 });
