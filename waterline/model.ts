@@ -31,19 +31,34 @@ module.exports = function(config) {
       if (!nextState)
         throw "State for next not defined"
       
+
+      
       try {
         await sails.models[modelname].state[nextState].runStateValidation(modelInstanceData)
       } catch (error) {
-        throw `move to ${nextState} ended with error: ${error}`
+        sails.log.debug(`StateFlow next() > runStateValidation error: ${error}`)
+        throw `runStateValidation to ${nextState} ended with error: ${error}`
       }  
-      console.log(nextState,sails.models[modelname].state[nextState] )
-      await sails.models[modelname].state[nextState].runInState(modelInstanceData)
+    
+      try {
+        await sails.models[modelname].state[nextState].runInState(modelInstanceData)
+      } catch (error) {
+        sails.log.debug(`StateFlow next() > runInState error: ${error}`)
+        throw `instate in ${nextState} ended with error: ${error}`
+      }  
+
       
       let update = {}
       update[stateField] = nextState;
       modelInstanceData = (await this.update(criteria, update).fetch())[0]
       
-      await sails.models[modelname].state[modelInstanceData[stateField]].runAfterState(modelInstanceData)
+      try {
+        await sails.models[modelname].state[modelInstanceData[stateField]].runAfterState(modelInstanceData)
+      } catch (error) {
+        sails.log.debug(`StateFlow next() > runAfterState error: ${error}`)
+        throw `runAfterState in ${modelInstanceData[stateField]} ended with error: ${error}`
+      }  
+
     },
     getState: async function (criteria: any) {
       let modelInstanceData
