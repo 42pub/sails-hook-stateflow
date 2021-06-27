@@ -36,8 +36,8 @@ module.exports = function(config) {
       } catch (error) {
         throw `move to ${nextState} ended with error: ${error}`
       }  
-
-      await sails.models[modelname].state[modelInstanceData[nextState]].runInState(modelInstanceData)
+      console.log(nextState,sails.models[modelname].state[nextState] )
+      await sails.models[modelname].state[nextState].runInState(modelInstanceData)
       
       let update = {}
       update[stateField] = nextState;
