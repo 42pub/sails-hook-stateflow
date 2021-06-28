@@ -59,7 +59,8 @@ export default async function (sails: any) {
           let routeRules: any,
             stateValidation: void,
             inState: void,
-            afterState: void;
+            afterState: void,
+            beforeState: void;
 
           if (fs.existsSync(statesApiPath)) {
             statesApi = require(statesApiPath);
@@ -68,6 +69,8 @@ export default async function (sails: any) {
                 routeRules = statesApi[state].routeRules;
               if (statesApi[state].stateValidation)
                 stateValidation = statesApi[state].stateValidation;
+              
+              if (statesApi[state].beforeState) beforeState = statesApi[state].beforeState;
               if (statesApi[state].inState) inState = statesApi[state].inState;
               if (statesApi[state].afterState)
                 afterState = statesApi[state].afterState;
@@ -80,6 +83,7 @@ export default async function (sails: any) {
             states[state],
             routeRules,
             stateValidation,
+            beforeState,
             inState,
             afterState
           );

@@ -11,11 +11,13 @@ class State {
      * @param inState Array with current state callbacks
      * @param afterState Array with afterstate callbacks
      */
-    constructor(name, routes, routeRules, stateValidation, inState, afterState) {
+    constructor(name, routes, routeRules, stateValidation, beforeState, inState, afterState) {
         /** Array with validations */
         this.stateValidation = [];
         /** Array with current state callbacks */
         this.inState = [];
+        /** Array with current state callbacks */
+        this.beforeState = [];
         /** Array with afterstate callbacks */
         this.afterState = [];
         this.routeRules = [];
@@ -31,6 +33,8 @@ class State {
             this.afterState.push(afterState);
         if (routeRules !== undefined)
             this.routeRules.push(routeRules);
+        if (beforeState !== undefined)
+            this.beforeState.push(beforeState);
     }
     /** Add special route for current state */
     checkRoute(stateName) {
@@ -75,11 +79,22 @@ class State {
         if (error)
             throw error;
     }
+    async runBeforeState(data) {
+        let error;
+        for await (let layerRunBeforeState of this.beforeState) {
+            await layerRunBeforeState(data, (e) => {
+                if (e)
+                    error = e;
+            });
+            if (error)
+                break;
+        }
+        if (error)
+            throw error;
+    }
     async runInState(data) {
         let error;
-        console.log("tst2", this.inState);
         for await (let layerRunInState of this.inState) {
-            console.log("tst", layerRunInState);
             await layerRunInState(data, (e) => {
                 if (e)
                     error = e;

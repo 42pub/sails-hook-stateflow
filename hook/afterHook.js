@@ -43,7 +43,7 @@ async function default_1(sails) {
                 Object.keys(states).forEach((state) => {
                     let statesApiPath = path.resolve(process.cwd(), "api/stateflow/", sails.models[modelname].globalId + "States.js");
                     let statesApi;
-                    let routeRules, stateValidation, inState, afterState;
+                    let routeRules, stateValidation, inState, afterState, beforeState;
                     if (fs.existsSync(statesApiPath)) {
                         statesApi = require(statesApiPath);
                         if (statesApi[state]) {
@@ -51,6 +51,8 @@ async function default_1(sails) {
                                 routeRules = statesApi[state].routeRules;
                             if (statesApi[state].stateValidation)
                                 stateValidation = statesApi[state].stateValidation;
+                            if (statesApi[state].beforeState)
+                                beforeState = statesApi[state].beforeState;
                             if (statesApi[state].inState)
                                 inState = statesApi[state].inState;
                             if (statesApi[state].afterState)
@@ -58,7 +60,7 @@ async function default_1(sails) {
                         }
                         sails.log.verbose(`StateFlow > state (${state}) loaded from ${statesApiPath}, for\n routeRules: ${typeof (routeRules)},\n stateValidation: ${typeof (stateValidation)},\n inState: ${typeof (inState)}\n afterState: ${typeof (afterState)}`);
                     }
-                    sails.models[modelname].state[state] = new State_1.State(state, states[state], routeRules, stateValidation, inState, afterState);
+                    sails.models[modelname].state[state] = new State_1.State(state, states[state], routeRules, stateValidation, beforeState, inState, afterState);
                 });
                 /** Нужно сделать проверку чтобы нельзя было записать новую звпись в БД с отличным от старСтейт состоянием   */
                 /** Tick runInState when create model instance */

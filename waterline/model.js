@@ -34,6 +34,14 @@ module.exports = function (config) {
                 sails.log.debug(`StateFlow next() > runStateValidation error: ${error}`);
                 throw `runStateValidation to ${nextState} ended with error: ${error}`;
             }
+            /** Если на beforeState будет next внутри, то будет плохо */
+            try {
+                await sails.models[modelname].state[nextState].runBeforeState(modelInstanceData);
+            }
+            catch (error) {
+                sails.log.debug(`StateFlow next() > beforeState error: ${error}`);
+                throw `beforeState in ${nextState} ended with error: ${error}`;
+            }
             /**
              * нужно сначало сохранять потомучто внутри одного next может быть другой.
              */

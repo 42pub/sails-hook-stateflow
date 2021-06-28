@@ -14,6 +14,9 @@ export class State {
   /** Array with current state callbacks */
   inState:  ((data: object, cb:(a: string) => void) => void)[] = [];
 
+  /** Array with current state callbacks */
+  beforeState:  ((data: object, cb:(a: string) => void) => void)[] = [];
+
   /** Array with afterstate callbacks */
   afterState: ((data: object, cb:(a: string) => void) => void)[] = [];
 
@@ -31,6 +34,7 @@ export class State {
     routes: string[],
     routeRules: void,
     stateValidation: void,
+    beforeState: void,
     inState: void,
     afterState: void
   ) {
@@ -42,6 +46,7 @@ export class State {
     if (inState !== undefined) this.inState.push(inState);
     if (afterState !== undefined) this.afterState.push(afterState);
     if (routeRules !== undefined) this.routeRules.push(routeRules);
+    if (beforeState !== undefined) this.beforeState.push(beforeState);
   }
 
   /** Add special route for current state */
@@ -83,12 +88,20 @@ export class State {
     if (error) throw error
   } 
 
+  async runBeforeState(data: any){
+    let error: string;
+    for await (let layerRunBeforeState of this.beforeState) {
+      await layerRunBeforeState(data, (e) => {
+        if (e) error = e;
+      })
+      if(error) break;
+    }
+    if (error) throw error
+  }
+
   async runInState(data: any){
     let error: string;
-    console.log("tst2", this.inState)
-
     for await (let layerRunInState of this.inState) {
-      console.log("tst", layerRunInState)
       await layerRunInState(data, (e) => {
         if (e) error = e;
       })
