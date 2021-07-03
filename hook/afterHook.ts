@@ -75,7 +75,7 @@ export default async function (sails: any) {
               if (statesApi[state].afterState)
                 afterState = statesApi[state].afterState;
             }
-            sails.log.verbose(`StateFlow > state (${state}) loaded from ${statesApiPath}, for\n routeRules: ${typeof(routeRules)},\n stateValidation: ${typeof(stateValidation)},\n inState: ${typeof(inState)}\n afterState: ${typeof(afterState)}`)
+            sails.log.silly(`StateFlow > state (${state}) loaded from ${statesApiPath}, for\n routeRules: ${typeof(routeRules)},\n stateValidation: ${typeof(stateValidation)},\n inState: ${typeof(inState)}\n afterState: ${typeof(afterState)}`)
           }
 
           sails.models[modelname].state[state] = new State(
@@ -100,7 +100,7 @@ export default async function (sails: any) {
           if (!state){
             throw "Start state is not defined"
           }
-          console.log(state, sails.models[modelname].state);
+          //console.log(state, sails.models[modelname].state);
           sails.models[modelname].state[state].runInState(values);
           if (afterCreate) {
             afterCreate(values, cb);

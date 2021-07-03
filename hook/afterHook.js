@@ -70,7 +70,7 @@ async function default_1(sails) {
                     if (!state) {
                         throw "Start state is not defined";
                     }
-                    console.log(state, sails.models[modelname].state);
+                    //console.log(state, sails.models[modelname].state);
                     sails.models[modelname].state[state].runInState(values);
                     if (afterCreate) {
                         afterCreate(values, cb);
