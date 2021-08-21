@@ -7,6 +7,9 @@ import fs = require("fs");
 export default async function (sails: any) {
   try {
     const conf = sails.config.stateflow;
+    
+    if (!conf.models) return sails.log.info("StateFlow >> models not found in stateflow config") 
+ 
     Object.keys(conf.models).forEach((modelName) => {
       let modelname = modelName.toLowerCase();
       let modelConf = conf.models[modelName]
@@ -50,20 +53,27 @@ export default async function (sails: any) {
       if (states) {
         sails.models[modelname].state = {};
         Object.keys(states).forEach((state) => {
-          let statesApiPath = path.resolve(
-            process.cwd(),
-            "api/stateflow/",
-            sails.models[modelname].globalId + "States.js"
-          );
-          let statesApi: string;
-          let routeRules: any,
-            stateValidation: void,
-            inState: void,
-            afterState: void,
-            beforeState: void;
+          let flowFile
+          // First check config flowFile
+          if (modelConf.flowFile && fs.existsSync(flowFile)){
+            flowFile = modelConf.flowFile
+          } else {
+            flowFile = path.resolve(
+              process.cwd(),
+              "api/stateflow/",
+              sails.models[modelname].globalId + "States.js"
+            );
+          }
 
-          if (fs.existsSync(statesApiPath)) {
-            statesApi = require(statesApiPath);
+          let statesApi: string;
+          let routeRules: any;
+          let stateValidation: void;
+          let inState: void;
+          let afterState: void;
+          let beforeState: void;
+
+          if (fs.existsSync(flowFile)) {
+            statesApi = require(flowFile);
             if (statesApi[state]) {
               if (statesApi[state].routeRules)
                 routeRules = statesApi[state].routeRules;
@@ -75,7 +85,7 @@ export default async function (sails: any) {
               if (statesApi[state].afterState)
                 afterState = statesApi[state].afterState;
             }
-            sails.log.silly(`StateFlow > state (${state}) loaded from ${statesApiPath}, for\n routeRules: ${typeof(routeRules)},\n stateValidation: ${typeof(stateValidation)},\n inState: ${typeof(inState)}\n afterState: ${typeof(afterState)}`)
+            sails.log.silly(`StateFlow > state (${state}) loaded from ${flowFile}, for\n routeRules: ${typeof(routeRules)},\n stateValidation: ${typeof(stateValidation)},\n inState: ${typeof(inState)}\n afterState: ${typeof(afterState)}`)
           }
 
           sails.models[modelname].state[state] = new State(
