@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2019",
+    "lib": [
+      "dom"
+    ],
+    "types": [
+      "bluebird-global",
+      "mocha",
+      "node",
+      "chai"
+    ],
+    "sourceMap": false,
+    "declaration": true,
+    "removeComments": false,
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

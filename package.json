@@ -1,55 +1,44 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-        "scope": null,
-        "escapedName": null,
-        "name": null,
-        "rawSpec": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-        "spec": "http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-        "type": "git"
-      },
-      "/srv/tdc/back"
-    ]
-  ],
-  "_from": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-  "_id": "sails-hook-stateflow@0.0.1",
-  "_inCache": true,
-  "_location": "/sails-hook-stateflow",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-    "scope": null,
-    "escapedName": null,
-    "name": null,
-    "rawSpec": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-    "spec": "http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-    "type": "git"
+  "description": "State framework for SailsJS",
+  "devDependencies": {
+    "@types/bluebird": "^3.5.32",
+    "@types/bluebird-global": "^3.5.12",
+    "@types/body-parser": "^1.19.0",
+    "@types/chai": "^4.2.11",
+    "@types/express": "^4.17.7",
+    "@types/faker": "^4.1.12",
+    "@types/lodash": "^4.14.157",
+    "@types/mocha": "^8.0.2",
+    "@types/moment": "^2.13.0",
+    "@types/moment-timezone": "^0.5.13",
+    "@types/node": "^14.0.24",
+    "@types/uuid": "^8.0.0",
+    "@types/waterline": "^0.13.0",
+    "chai": "^4.2.0",
+    "faker": "^4.1.0",
+    "intermock": "^0.2.2",
+    "is-promise": "^4.0.0",
+    "mocha": "^8.1.1",
+    "rc": "1.0.1",
+    "sails": "^1.4.3",
+    "ts-node": "^8.10.2",
+    "typed-sails": "git+https://github.com/42Sails/typed-sails.git"
   },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#2a0fbe27b9107da42c64df3dac7a96416112ff07",
-  "_shasum": "15cf85dd1887cd4d6ed075d92fc49173406551bc",
-  "_shrinkwrap": null,
-  "_spec": "git+http://git.42team.ru/SailsAdmin/sails-hook-adminpanel-floormaps#HEAD",
-  "_where": "/srv/tdc/back",
-  "dependencies": {
-    "lodash": "^4.17.5"
-  },
-  "description": "Core for any shop",
-  "devDependencies": {},
-  "gitHead": "2a0fbe27b9107da42c64df3dac7a96416112ff07",
   "main": "index.js",
   "name": "sails-hook-stateflow",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "sails": {
     "isHook": true,
-    "hookName": "hookStateFlow"
+    "hookName": "stateflow"
   },
-  "scripts": {},
-  "version": "0.2.0"
+  "scripts": {
+    "test": "tsc ; mocha -r ts-node/register test/bootstrap.ts '{,**/}*.test.ts'",
+    "test:js": "tsc ; mocha test/_bootstrap.js test/**/*.test.js",
+    "test:init": "cd ./test/fixtures/v1.x-app && npm i --no-package-lock --prefix ./ && cd -"
+  },
+  "version": "1.0.0",
+  "dependencies": {
+    "typed-sails": "git+https://github.com/42Sails/typed-sails.git",
+    "typescript": "^4.3.2"
+  }
 }

@@ -2,8 +2,8 @@
 
 module.exports = function (sails) {
     return {
-        defaults: require('./lib/defaults'),
-        initialize: require('./lib/initializeModel')(sails)
+        defaults: require('./hook/defaults'),
+        initialize: require('./hook/initialize').default(sails)
     };
 };
 
