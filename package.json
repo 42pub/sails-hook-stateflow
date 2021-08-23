@@ -37,7 +37,7 @@
     "test:init": "cd ./test/fixtures/v1.x-app && npm i --no-package-lock --prefix ./ && cd -",
     "prepublish": "tsc ; echo 'done'"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
   "dependencies": {
     "@42pub/typed-sails": "^1.0.0",
     "typescript": "^4.3.2"
