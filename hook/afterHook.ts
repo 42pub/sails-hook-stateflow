@@ -55,7 +55,7 @@ export default async function (sails: any) {
         Object.keys(states).forEach((state) => {
           let flowFile
           // First check config flowFile
-          if (modelConf.flowFile && fs.existsSync(flowFile)){
+          if (modelConf.flowFile && fs.existsSync(modelConf.flowFile)){
             flowFile = modelConf.flowFile
           } else {
             flowFile = path.resolve(
