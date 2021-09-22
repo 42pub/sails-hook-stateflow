@@ -15,6 +15,10 @@ module.exports = function (config) {
         sails.log.error(error);
       }
       let stateField: string = this.stateflowModelConfig.stateField;
+      let currenState: string = modelInstanceData[stateField];
+      
+      if (currenState === nextState)
+        return;
 
       if (!nextState)
         nextState = await sails.models[modelname].state[
@@ -26,13 +30,16 @@ module.exports = function (config) {
       if (nextState && !sails.models[modelname].state[nextState])
         throw `state with name ${nextState} not present in ${this.globalId} model`;
 
+        console.log(stateField, nextState)
+
+
       if (
         nextState &&
         !(await sails.models[modelname].state[
           modelInstanceData[stateField]
         ].checkRoute(nextState))
       )
-        throw `route for  ${nextState} don't preset in current state`;
+        throw `route for  ${nextState} don't preset in current state: ${currenState}`;
 
       if (sails.models[modelname].state[nextState] === undefined)
         throw `State with name ${nextState} not found`;
@@ -77,7 +84,7 @@ module.exports = function (config) {
 
       try {
         await sails.models[modelname].state[
-          modelInstanceData[stateField]
+          currenState
         ].runAfterState(modelInstanceData);
       } catch (error) {
         sails.log.debug(`StateFlow next() > runAfterState error: ${error}`);
