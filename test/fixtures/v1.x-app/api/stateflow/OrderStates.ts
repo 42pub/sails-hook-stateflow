@@ -4,9 +4,10 @@ module.exports = {
       sails.stateflow_test = {}
       return "TEST_ROUTE_RULES";
     },
-    stateValidation: async function (data: any, cb: void): Promise<void> {
+    stateValidation: async function (data: any, cb): Promise<void> {
       sails.stateflow_test.stateValidation = true
       cb();
+      return
     },
     inState: async function (data, cb): Promise<void> {
       sails.stateflow_test.inState = true
@@ -35,7 +36,7 @@ module.exports = {
     routeRules: async function (data, cb): Promise<string> {
       return "true";
     },
-    stateValidation: async function (data, cb): Promise<void> {
+    stateValidation: async function (data, cb): Promise<boolean> {
       return true;
     },
     inState: async function (data, cb): Promise<void> {
@@ -49,7 +50,7 @@ module.exports = {
     routeRules: async function (data, cb): Promise<string> {
       return "true";
     },
-    stateValidation: async function (data, cb): Promise<void> {
+    stateValidation: async function (data, cb): Promise<boolean> {
       return true;
     },
     inState: async function (data, cb): Promise<void> {

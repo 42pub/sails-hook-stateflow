@@ -41,8 +41,10 @@ export default async function (sails: any) {
           //isIn: Object.keys(modelConf.states)
       };
 
-      if(!waterlineRequired)
-        field.defaultsTo = modelConf.startState
+      // Sails1x no support defaultTo 
+      // TODO: rewrite to set defaultsTo in beforeCreate
+      // if(!waterlineRequired)
+      //   field.defaultsTo = modelConf.startState
 
       sails.models[modelname].attributes[stateField] = field
 
@@ -66,11 +68,11 @@ export default async function (sails: any) {
           }
 
           let statesApi: string;
-          let routeRules: any;
-          let stateValidation: void;
-          let inState: void;
-          let afterState: void;
-          let beforeState: void;
+          let routeRules: Function;
+          let stateValidation: Function;
+          let inState: Function;
+          let afterState: Function;
+          let beforeState: Function;
 
           if (fs.existsSync(flowFile)) {
             statesApi = require(flowFile);

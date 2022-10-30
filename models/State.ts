@@ -1,4 +1,3 @@
-import sails from "typed-sails";
 
 /** State instance */
 export class State {
@@ -9,18 +8,18 @@ export class State {
   routes: string[];
 
   /** Array with validations */
-  stateValidation: ((data: object, cb:(a: string) => void) => void)[] = [];
+  stateValidation: Function[];
 
   /** Array with current state callbacks */
-  inState:  ((data: object, cb:(a: string) => void) => void)[] = [];
+  inState:  Function[];
 
   /** Array with current state callbacks */
-  beforeState:  ((data: object, cb:(a: string) => void) => void)[] = [];
+  beforeState:  Function[];
 
   /** Array with afterstate callbacks */
-  afterState: ((data: object, cb:(a: string) => void) => void)[] = [];
+  afterState: Function[];
 
-  routeRules: ((data: object, route:(a: string) => void) => void)[] = [];
+  routeRules: Function[];
   /**
    *
    * @param name Name of State
@@ -32,11 +31,11 @@ export class State {
   constructor(
     name: string,
     routes: string[],
-    routeRules: void,
-    stateValidation: void,
-    beforeState: void,
-    inState: void,
-    afterState: void
+    routeRules: Function,
+    stateValidation: Function,
+    beforeState: Function,
+    inState: Function,
+    afterState: Function
   ) {
     if (!name || !routes) throw "name & routes arguments required";
     this.name = name;

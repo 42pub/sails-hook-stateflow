@@ -120,10 +120,11 @@ module.exports = function (config) {
     addState: function (
       state: string,
       routes: string[],
-      routeRules: void,
-      stateValidation: void,
-      inState: void,
-      afterState: void
+      routeRules: Function,
+      stateValidation: Function,
+      beforeState: Function,
+      inState: Function,
+      afterState: Function
     ) {
       if (sails.models[this.globalId.toLowerCase()].state[state])
         throw `State with name: ${state} present in model`;
@@ -135,6 +136,7 @@ module.exports = function (config) {
           routes,
           routeRules,
           stateValidation,
+          beforeState,
           inState,
           afterState
         );

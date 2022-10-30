@@ -5,14 +5,14 @@ export declare class State {
     /** All states to possible to shift next */
     routes: string[];
     /** Array with validations */
-    stateValidation: ((data: object, cb: (a: string) => void) => void)[];
+    stateValidation: Function[];
     /** Array with current state callbacks */
-    inState: ((data: object, cb: (a: string) => void) => void)[];
+    inState: Function[];
     /** Array with current state callbacks */
-    beforeState: ((data: object, cb: (a: string) => void) => void)[];
+    beforeState: Function[];
     /** Array with afterstate callbacks */
-    afterState: ((data: object, cb: (a: string) => void) => void)[];
-    routeRules: ((data: object, route: (a: string) => void) => void)[];
+    afterState: Function[];
+    routeRules: Function[];
     /**
      *
      * @param name Name of State
@@ -21,7 +21,7 @@ export declare class State {
      * @param inState Array with current state callbacks
      * @param afterState Array with afterstate callbacks
      */
-    constructor(name: string, routes: string[], routeRules: void, stateValidation: void, beforeState: void, inState: void, afterState: void);
+    constructor(name: string, routes: string[], routeRules: Function, stateValidation: Function, beforeState: Function, inState: Function, afterState: Function);
     /** Add special route for current state */
     checkRoute(stateName: string): boolean;
     /** Add special route for current state */

@@ -5,7 +5,7 @@ function ToInitialize(sails) {
     return function initialize(cb) {
         // TODO: Добавть в конфиг очередь загрузки
         sails.after(['hook:http:loaded'], () => {
-            afterHook_1.default(sails);
+            (0, afterHook_1.default)(sails);
         });
         return cb();
     };

@@ -7,6 +7,7 @@ module.exports = {
         stateValidation: async function (data, cb) {
             sails.stateflow_test.stateValidation = true;
             cb();
+            return;
         },
         inState: async function (data, cb) {
             sails.stateflow_test.inState = true;

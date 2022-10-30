@@ -27,9 +27,17 @@ async function default_1(sails) {
             let field = {
                 type: "string",
                 required: waterlineRequired,
+                /**
+                 * This not accesed add state in runtime
+                 * but this need implement
+                 * */
+                // TODO: Add isIn In runtime
+                //isIn: Object.keys(modelConf.states)
             };
-            if (!waterlineRequired)
-                field.defaultsTo = modelConf.startState;
+            // Sails1x no support defaultTo 
+            // TODO: rewrite to set defaultsTo in beforeCreate
+            // if(!waterlineRequired)
+            //   field.defaultsTo = modelConf.startState
             sails.models[modelname].attributes[stateField] = field;
             let model = new Model({ ...modelConf, model: modelname });
             _.merge(sails.models[modelname], model);
