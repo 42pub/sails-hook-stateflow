@@ -90,12 +90,12 @@ module.exports = function (config) {
             return this.state[modelInstanceData[stateField]];
         },
         /** Add state in current model */
-        addState: function (state, routes, routeRules, stateValidation, inState, afterState) {
+        addState: function (state, routes, routeRules, stateValidation, beforeState, inState, afterState) {
             if (sails.models[this.globalId.toLowerCase()].state[state])
                 throw `State with name: ${state} present in model`;
             let newState;
             try {
-                newState = new State_1.State(state, routes, routeRules, stateValidation, inState, afterState);
+                newState = new State_1.State(state, routes, routeRules, stateValidation, beforeState, inState, afterState);
             }
             catch (error) { }
             sails.models[this.globalId.toLowerCase()].state[state] = newState;

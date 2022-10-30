@@ -1,8 +1,8 @@
 /// <reference path="../types/global.ts" />
-
+process.env.PORT = "1336"
 import 'mocha';
 import * as _ from '@sailshq/lodash';
-var Sails = require('./fixtures/v1.x-app/node_modules/sails').Sails;
+var Sails = require('./fixture/node_modules/sails').Sails;
 
 let sails: any
 
