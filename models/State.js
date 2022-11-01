@@ -12,6 +12,17 @@ class State {
      * @param afterState Array with afterstate callbacks
      */
     constructor(name, routes, routeRules, stateValidation, beforeState, inState, afterState) {
+        /** All states to possible to shift next */
+        this.routes = [];
+        /** Array with validations */
+        this.stateValidation = [];
+        /** Array with current state callbacks */
+        this.inState = [];
+        /** Array with current state callbacks */
+        this.beforeState = [];
+        /** Array with afterstate callbacks */
+        this.afterState = [];
+        this.routeRules = [];
         if (!name || !routes)
             throw "name & routes arguments required";
         this.name = name;

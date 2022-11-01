@@ -5,21 +5,21 @@ export class State {
   name: string;
 
   /** All states to possible to shift next */
-  routes: string[];
+  routes: string[] = [];
 
   /** Array with validations */
-  stateValidation: Function[];
+  stateValidation: Function[] = [];
 
   /** Array with current state callbacks */
-  inState:  Function[];
+  inState:  Function[] = [];
 
   /** Array with current state callbacks */
-  beforeState:  Function[];
+  beforeState:  Function[] = [];
 
   /** Array with afterstate callbacks */
-  afterState: Function[];
+  afterState: Function[] = [];
 
-  routeRules: Function[];
+  routeRules: Function[] = [];
   /**
    *
    * @param name Name of State

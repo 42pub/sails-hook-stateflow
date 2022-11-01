@@ -43,8 +43,9 @@ export default async function (sails: any) {
 
       // Sails1x no support defaultTo 
       // TODO: rewrite to set defaultsTo in beforeCreate
-      // if(!waterlineRequired)
-      //   field.defaultsTo = modelConf.startState
+      if(!waterlineRequired)
+        //@ts-ignore
+        field.defaultsTo = modelConf.startState
 
       sails.models[modelname].attributes[stateField] = field
 

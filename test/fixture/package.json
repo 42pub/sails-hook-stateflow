@@ -6,7 +6,7 @@
     "rc": "1.0.1",
     "sails": "^1.4.3",
     "sails-hook-orm": "^3.0.2",
-    "sails-hook-stateflow": "../../../."
+    "sails-hook-stateflow": "../.."
   },
   "main": "app.js"
 }

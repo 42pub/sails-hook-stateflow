@@ -1,8 +1,9 @@
 "use strict";
-/// <reference path="../types/global.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="../types/global.ts" />
+process.env.PORT = "1336";
 require("mocha");
-var Sails = require('./fixtures/v1.x-app/node_modules/sails').Sails;
+var Sails = require('./fixture/node_modules/sails').Sails;
 let sails;
 before(function (done) {
     this.timeout(50000);
