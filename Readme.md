@@ -1,42 +1,42 @@
-## States - Стейт 
-**состояние**, просто уникальная строка котоая записывается в определенное поле в моделе, 
+## States
+**state**, just a unique string that is written to a specific field in the model,
 
-> Рекомендация: Называйте сейт так чтобы название  отвечало на вопрос: что сейчас происходит с вашим обектом?
+> Recommendation: Name the site so that the name answers the question: what is happening with your object now?
 
-## Routes and rules - Маршруты и Правила перехода. 
+## Routes and rules - Routes and Navigation rules.
 
-**Маршруты** это то куда может перейти с этого стейта. 
+**Routes** is where it can go from this state.
 
-**Правила перехода** - это методы которые будут вызваны пред afterState(), для того чтобы выявить потенциальные маршруты прехода. Код маршрута выполняется перед валидацией следующего стейта. Чтобы прекратить переход достаточно вызвать throw в одном из rules.
+**Transition rules** are methods that will be called before afterState() in order to identify potential transition routes. The route code is executed before the next state is validated. To stop the transition, just call throw in one of the rules.
 
-> Рекомендация: не выполняйте действия модифицирующие данные, так как правило перехода может быть отменено, если переход по какимто причинам не состоялся. 
+> Recommendation: do not perform actions that modify data, since the transition rule can be canceled if the transition for some reason did not take place.
 
 
-Очередь перехода:
-1. stateValidation()
-2. Обновляет поле стейт в моделе
-3. inState() того стейта вкоторый перешли
-4. afterState() предыдущего стейта
+Jump queue:
+1.stateValidation()
+2. Updates the state field in the model
+3. inState() of the state you have moved to
+4. afterState() of the previous state
 
-## Validations
+##Validations
 
-`stateValidation()` проверка при входе на стейт
+`stateValidation()` validation when entering a state
 
-Массив с функцями которые могут вернуть лож\истина, чтобы перейти на стейт нужно выполнить все функции положительно. Это похоже на условия beforeValidation
+An array with functions that can return false / true, in order to go to the state, all functions must be performed positively. This is similar to beforeValidation conditions
 
-> примичание: Чтобы перейти на стейт нужно чтобы все функции вернули `true`.
+> note: To jump to a state, all functions must return `true`.
 
 ### inStateCallback
 
-`inStateCallback()` метод который будет вызван при входе на стейт
+`inStateCallback()` method that will be called when entering the state
 
-> примичание: ошибки игнорируются
+> note: errors are ignored
 
-### after state callback
+###after state callback
 
 `afterState()`
  
-> примичание: ошибки игнорируются
+> note: errors are ignored
 
 ### TODO
 1. Add states by config 🗹
@@ -49,7 +49,7 @@
 
 
 
-### Config
+###Config
 
 
 ```
@@ -60,16 +60,16 @@ module.exports.stateflow = {
     /** If no model defined in sails.config.stateflow, hook use Order model */
 
     NotOrder: {
-      /** Default state */
+      /** default state */
       stateField: "not_state",
       
       /** Create attribute of waterline model with required option. by default false*/
-      waterlineRequired: true,
+      waterlineRequired: true
 
       /** Generate init states */
       states: {
         alpha: ["beta"],
-        beta: ["gama"],
+        beta: ["gamma"],
         gama: ["zeta"],
         zeta: ["alpha"],
       },
@@ -82,7 +82,7 @@ module.exports.stateflow = {
         ONE: ["TWO"],
         TWO: ["THREE", "FOUR"],
         TRHEE: ["ONE", "FOUR"],
-        FOUR: [],
+        FOUR:[],
       },
     },
   },
@@ -90,6 +90,6 @@ module.exports.stateflow = {
 
 
 ```
-1. после создания нужно сделать next чтобы запусить  первый стейт, если создано сразу с стейтом, то получает что inState не будет вызван никогда.
+1. after creation, you need to do next to start the first state, if created immediately with the state, then it gets that inState will never be called.
 
-Этот модуль работает с патчами dark-sails
+This module works with dark-sails patches
