@@ -110,6 +110,7 @@ export default async function (sails: any) {
         
         sails.models[modelname].afterCreate = async function (values, cb ) {
           let state = values.state ? values.state : modelConf.startState;
+          if (state === "") state = modelConf.startState
           if (!state){
             throw "Start state is not defined"
           }
