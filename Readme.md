@@ -22,7 +22,7 @@ Jump queue:
 
 `stateValidation()` validation when entering a state
 
-An array with functions that can return false / true, in order to go to the state, all functions must be performed positively. This is similar to beforeValidation conditions
+Similar to beforeValidation conditions. Throw an error to fail `stateValidation` function. In other cases it will pass you further, to `inState` function.
 
 > note: To jump to a state, all functions must return `true`.
 
