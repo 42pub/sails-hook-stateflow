@@ -49,7 +49,7 @@ Similar to beforeValidation conditions. Throw an error to fail `stateValidation`
 
 
 
-###Config
+### Config
 
 
 ```
@@ -93,3 +93,12 @@ module.exports.stateflow = {
 1. after creation, you need to do next to start the first state, if created immediately with the state, then it gets that inState will never be called.
 
 This module works with dark-sails patches
+
+### Run only by 'stateflow:runHook' event
+If you want stateflow to run only after `stateflow:runHook` event, use runOnlyByEvent flag in config. Example:
+```
+module.exports.stateflow = {
+    models: ...
+    runOnlyByEvent
+}
+```

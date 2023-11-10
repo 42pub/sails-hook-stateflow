@@ -10,7 +10,7 @@ module.exports = function (config) {
             let modelInstanceData;
             let modelname = this.globalId.toLowerCase();
             try {
-                modelInstanceData = await this.findOne(criteria);
+                modelInstanceData = (await this.find(criteria).limit(1))[0];
             }
             catch (error) {
                 sails.log.error(error);
@@ -70,7 +70,7 @@ module.exports = function (config) {
         getState: async function (criteria) {
             let modelInstanceData;
             try {
-                modelInstanceData = await this.findOne(criteria);
+                modelInstanceData = (await this.find(criteria).limit(1))[0];
             }
             catch (error) {
                 sails.log.error(error);
@@ -81,7 +81,7 @@ module.exports = function (config) {
         getStateObject: async function (criteria) {
             let modelInstanceData;
             try {
-                modelInstanceData = await this.findOne(criteria);
+                modelInstanceData = (await this.find(criteria).limit(1))[0];
             }
             catch (error) {
                 sails.log.error(error);
